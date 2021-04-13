@@ -4,6 +4,10 @@ import normalize from 'normalize.css';
 const GlobalStyles = createGlobalStyle`
     ${normalize}
 
+    * {
+        @import "https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900";
+      }
+
     *, *:before, *:after {
         box-sizing: border-box;
       }
@@ -15,11 +19,20 @@ const GlobalStyles = createGlobalStyle`
       }
     
       body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-          Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+        font-family: "Lato", sans-serif;
         background-color: #fff;
         line-height: 1.4;
+        background: #221f1f;
+        color: #ffffff;
       }
+
+      ul{
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+
+
     
       a:link,
       a:visited {
