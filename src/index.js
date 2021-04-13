@@ -3,11 +3,47 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import GlobalStyle from './components/GlobalStyle';
+import {
+  ApolloClient,
+  ApolloProvider,
+  InMemoryCache,
+  createHttpLink,
+} from '@apollo/client';
+import { setContext } from 'apollo-link-context';
+import { RecoilRoot } from 'recoil';
+
+const uri = process.env.REACT_APP_URI;
+
+//啟動快取
+const cache = new InMemoryCache();
+const httplink = createHttpLink({ uri });
+const authLink = setContext((_, { headers }) => {
+  return {
+    headers: {
+      ...headers,
+      authorization: localStorage.getItem('token') || '',
+    },
+  };
+});
+
+// @ts-ignore
+const link = authLink.concat(httplink);
+const client = new ApolloClient({
+  // @ts-ignore
+  link,
+  cache,
+  //啟用開發者工具
+  connectToDevTools: true,
+});
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <ApolloProvider client={client}>
+    <RecoilRoot>
+      <GlobalStyle />
+      <App />
+    </RecoilRoot>
+  </ApolloProvider>,
   document.getElementById('root')
 );
 
