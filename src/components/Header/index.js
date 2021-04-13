@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Navgation from './Navgation';
 import Search from './Search';
+import UserProfile from './UserProfile';
 
 const StyledHeader = styled.header`
   background: linear-gradient(to bottom, black 0%, transparent 100%);
@@ -15,10 +16,13 @@ const StyledHeader = styled.header`
 `;
 
 function Header() {
+  const url =
+    'https://www.gravatar.com/avatar/a10d2dadfe08fb12f57abc0c82f74554.jpg?d=identicon';
   return (
     <StyledHeader>
       <Navgation />
       <Search />
+      <UserProfile name="wilson" url={url} />
     </StyledHeader>
   );
 }
