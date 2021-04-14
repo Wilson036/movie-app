@@ -13,7 +13,7 @@ const StyledNav = styled.nav`
       transition: background 0.125s ease;
       border-radius: 4px;
       &:hover {
-        background: #e50914;
+        background: rgba(255, 255, 255, 0.2);
         cursor: pointer;
       }
     }
