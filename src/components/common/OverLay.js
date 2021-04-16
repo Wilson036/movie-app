@@ -1,4 +1,4 @@
-const { default: styled } = require('styled-components');
+import styled from 'styled-components';
 
 const OverLay = styled.div`
   background: linear-gradient(to bottom, #221f1f 0%, rgba(34, 31, 31, 0) 100%);
