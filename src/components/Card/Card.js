@@ -35,7 +35,6 @@ export default function Card({ title, url }) {
     fetch(requestUrl)
       .then((response) => response.json())
       .then((data) => {
-        console.log('data', data);
         setData((prevData) => ({
           ...prevData,
           ...data,

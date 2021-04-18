@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import ListToggle from './ListToggle';
+import { ListToggle } from './ListToggle';
 
 const StyledItem = styled.div`
   width: calc(20% - 10px);
@@ -25,7 +25,7 @@ const StyledItem = styled.div`
     background-size: 150%;
     div {
       opacity: 1;
-      div:last-child {
+      div:nth-child(3) {
         margin-top: 10px;
       }
     }
@@ -86,8 +86,8 @@ export default function Item({ title, score, overview, backdrop }) {
         <ItemTitle>{title}</ItemTitle>
         <Rank>{score}</Rank>
         <Plot>{overview}</Plot>
+        <ListToggle />
       </OverLay>
-      <ListToggle toggled={true} />
     </StyledItem>
   );
 }

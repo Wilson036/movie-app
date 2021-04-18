@@ -6,6 +6,7 @@ const Profile = styled.div`
 `;
 
 const User = styled.div`
+  cursor: pointer;
   display: flex;
 `;
 
@@ -17,6 +18,9 @@ const Image = styled.div`
   height: 40px;
   border: 3px solid transparent;
   transition: broder 0.125s ease;
+  &:hover {
+    border: 3px solid #e50914;
+  }
   img {
     width: 100%;
     display: block;

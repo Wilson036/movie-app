@@ -1,8 +1,10 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 
-const ListToggle = styled.div`
-  border: 2px solid #e50914;
-  background: #e50914;
+const ListToggleDiv = styled.div`
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: ${({ toggled }) => (toggled ? '#e50914' : 'none')};
   width: 32px;
   height: 32px;
   font-size: 16px;
@@ -21,13 +23,13 @@ const ListToggle = styled.div`
   }
   div {
     position: absolute;
-    top: ${({ toggled }) => (toggled ? '-32' : '0')};
-    left: 0;
+    top: ${({ toggled }) => (toggled ? '-32px' : '0')};
+    left: 4px;
     height: 64px;
     width: 32px;
     -webkit-transition: 0.125s ease;
     transition: 0.125s ease;
-    i {
+    svg {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -37,4 +39,20 @@ const ListToggle = styled.div`
   }
 `;
 
-export default ListToggle;
+export const ListToggle = () => {
+  const [toggled, setToggled] = useState(false);
+
+  return (
+    <ListToggleDiv
+      toggled={toggled}
+      onClick={() => {
+        setToggled(!toggled);
+      }}
+    >
+      <div>
+        <FontAwesomeIcon icon={['fas', 'plus']} size="lg" />
+        <FontAwesomeIcon icon={['fas', 'check']} size="lg" />
+      </div>
+    </ListToggleDiv>
+  );
+};
