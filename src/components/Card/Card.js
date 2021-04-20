@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Item from './Item';
 
@@ -35,6 +36,7 @@ export default function Card({ title, url }) {
     fetch(requestUrl)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setData((prevData) => ({
           ...prevData,
           ...data,
@@ -49,19 +51,14 @@ export default function Card({ title, url }) {
     loadContent();
   }, [url]);
 
-  const titles = data.results.map((title, i) => {
+  const titles = data.results.map((info, i) => {
     if (i < 5) {
-      const name = !title.name ? title.original_title : title.name;
-      const backDrop = `http://image.tmdb.org/t/p/original${title.backdrop_path}`;
-      return (
-        <Item
-          key={title.id}
-          title={name}
-          score={title.vote_average}
-          overview={title.overview}
-          backdrop={backDrop}
-        />
-      );
+      const title = !info.name ? info.original_title : info.name;
+      const backDrop = `http://image.tmdb.org/t/p/original${info.backdrop_path}`;
+      info = { ...info, backDrop, title };
+      console.log(info);
+
+      return <Item key={info.id} info={info} />;
     }
   });
 

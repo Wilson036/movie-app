@@ -57,16 +57,14 @@ const GlobalStyles = createGlobalStyle`
         background: #221f1f;
         color: #ffffff;
       }
-    
-      a:link,
-      a:visited {
-        color: #0077cc;
+      
+      a,a:hover{
+        color: #fff;
+        text-decoration:none;
       }
+     
     
-      a:hover,
-      a:focus {
-        color: #004499;
-      }
+    
     
       code,
       pre {

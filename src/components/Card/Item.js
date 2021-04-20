@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ListToggle } from './ListToggle';
 
@@ -79,13 +80,16 @@ const Plot = styled.div`
   transition: margin 0.25s ease 0.125s, opacity 0.25s ease 0.25s;
 `;
 
-export default function Item({ title, score, overview, backdrop }) {
+export default function Item({ info }) {
+  const { title, score, overview, backDrop } = info;
   return (
-    <StyledItem backdrop={backdrop}>
+    <StyledItem backdrop={backDrop}>
       <OverLay>
-        <ItemTitle>{title}</ItemTitle>
-        <Rank>{score}</Rank>
-        <Plot>{overview}</Plot>
+        <Link to={{ pathname: `/movie-info/${title}`, state: { ...info } }}>
+          <ItemTitle>{title}</ItemTitle>
+          <Rank>{score}</Rank>
+          <Plot> {overview}</Plot>
+        </Link>
         <ListToggle />
       </OverLay>
     </StyledItem>
