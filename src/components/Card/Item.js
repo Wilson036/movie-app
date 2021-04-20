@@ -5,13 +5,12 @@ import { ListToggle } from './ListToggle';
 
 const StyledItem = styled.div`
   width: calc(20% - 10px);
-  min-width: calc(20% - 10px);
   background-color: #000;
   background-image: url(${(props) => `${props.backdrop}`});
   flex: 1 0 auto;
   background-position: center;
   background-size: 100%;
-  height: 200px;
+  height: 500px;
   background-repeat: no-repeat;
   overflow: hidden;
   margin-right: 10px;
@@ -84,14 +83,14 @@ export default function Item({ info }) {
   const { title, anticipation, img_src, release_date } = info;
   return (
     <StyledItem backdrop="https://movies.yahoo.com.tw/i/o/production/movies/March2021/vsfkM9g2D2WvlOqvcuS2-672x953.jpg">
-      <OverLay>
-        <Link to={{ pathname: `/movie-info/${title}`, state: { ...info } }}>
+      <Link to={{ pathname: `/movie-info/${title}`, state: { ...info } }}>
+        <OverLay>
           <ItemTitle>{title}</ItemTitle>
           <Rank>{anticipation}</Rank>
           <Plot> {release_date}</Plot>
-        </Link>
-        <ListToggle />
-      </OverLay>
+          <ListToggle />
+        </OverLay>
+      </Link>
     </StyledItem>
   );
 }

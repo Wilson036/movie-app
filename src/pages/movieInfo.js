@@ -18,7 +18,7 @@ const Post = styled.div`
   background-image: url(${(props) => `${props.backDrop}`});
   background-position: center;
   background-size: cover;
-  height: 740px;
+  height: 1120px;
   background-repeat: no-repeat;
 `;
 

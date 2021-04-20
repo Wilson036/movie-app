@@ -22,6 +22,9 @@ const TitleWrapper = styled.div`
 `;
 
 const Title = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
   font-size: 24px;
   font-weight: 600;
   line-height: 1.4;
@@ -29,9 +32,9 @@ const Title = styled.div`
 `;
 
 export default function Card({ title, movieDatas }) {
-  const titles = movieDatas.map((info) => {
-    return <Item key={info.movie_id} info={info} />;
-  });
+  const titles = movieDatas.map((info) => (
+    <Item key={info.movie_id} info={info} />
+  ));
 
   return (
     <TitleList>
