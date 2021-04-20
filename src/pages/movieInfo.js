@@ -29,14 +29,20 @@ const Description = styled.div`
 `;
 
 export default function movieInfo({ location }) {
-  const { name, vote_average, backDrop, popularity } = location.state;
+  const {
+    movie_id,
+    title,
+    anticipation,
+    img_src,
+    release_date,
+  } = location.state;
 
   return (
     <Container>
       <CardCont>
-        <Post backDrop={backDrop} />
+        <Post backDrop="https://movies.yahoo.com.tw/i/o/production/movies/March2021/vsfkM9g2D2WvlOqvcuS2-672x953.jpg" />
         <Description>
-          <h1>{name}</h1>
+          <h1>{title}</h1>
         </Description>
       </CardCont>
     </Container>

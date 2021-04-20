@@ -81,14 +81,14 @@ const Plot = styled.div`
 `;
 
 export default function Item({ info }) {
-  const { title, score, overview, backDrop } = info;
+  const { title, anticipation, img_src, release_date } = info;
   return (
-    <StyledItem backdrop={backDrop}>
+    <StyledItem backdrop="https://movies.yahoo.com.tw/i/o/production/movies/March2021/vsfkM9g2D2WvlOqvcuS2-672x953.jpg">
       <OverLay>
         <Link to={{ pathname: `/movie-info/${title}`, state: { ...info } }}>
           <ItemTitle>{title}</ItemTitle>
-          <Rank>{score}</Rank>
-          <Plot> {overview}</Plot>
+          <Rank>{anticipation}</Rank>
+          <Plot> {release_date}</Plot>
         </Link>
         <ListToggle />
       </OverLay>

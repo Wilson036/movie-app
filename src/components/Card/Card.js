@@ -28,38 +28,9 @@ const Title = styled.div`
   margin-bottom: 1em;
 `;
 
-const apiKey = '87dfa1c669eea853da609d4968d294be';
-export default function Card({ title, url }) {
-  const [data, setData] = useState({ results: [] });
-  const loadContent = () => {
-    const requestUrl = `https://api.themoviedb.org/3/${url}&api_key=${apiKey}`;
-    fetch(requestUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setData((prevData) => ({
-          ...prevData,
-          ...data,
-        }));
-      })
-      .catch((err) => {
-        console.log('There has been an error');
-      });
-  };
-
-  useEffect(() => {
-    loadContent();
-  }, [url]);
-
-  const titles = data.results.map((info, i) => {
-    if (i < 5) {
-      const title = !info.name ? info.original_title : info.name;
-      const backDrop = `http://image.tmdb.org/t/p/original${info.backdrop_path}`;
-      info = { ...info, backDrop, title };
-      console.log(info);
-
-      return <Item key={info.id} info={info} />;
-    }
+export default function Card({ title, movieDatas }) {
+  const titles = movieDatas.map((info) => {
+    return <Item key={info.movie_id} info={info} />;
   });
 
   return (
