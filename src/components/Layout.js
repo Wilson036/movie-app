@@ -16,16 +16,12 @@ const FetchData = () => {
   const [area, setArea] = useRecoilState(areasInfo);
   const [theater, setTheater] = useRecoilState(theaterInfo);
   const areaInfo = useQuery(GET_AREA_INFO);
-  const treaters = useQuery(GET_THEATER_INFO, {
-    variables: {
-      id: '28',
-    },
-  });
+  const treaters = useQuery(GET_THEATER_INFO);
   if (!areaInfo.loading && !areaInfo.error) {
     setArea(areaInfo.data.queryAllArea);
   }
   if (!treaters.loading && !treaters.error) {
-    setTheater(treaters.data.queryTheaterById);
+    setTheater(treaters.data.getAllTheaters);
   }
 };
 

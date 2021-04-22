@@ -10,7 +10,7 @@ const StyledItem = styled.div`
   flex: 1 0 auto;
   background-position: center;
   background-size: 100%;
-  height: 500px;
+  height: 328px;
   background-repeat: no-repeat;
   overflow: hidden;
   margin-right: 10px;
