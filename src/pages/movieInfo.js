@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
   Button,
@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import { useRecoilValue } from 'recoil';
 import { areasInfo, theaterInfo } from '../store';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { UPDATE_SHOW_TIME } from 'gql/mutation';
 
 const Container = styled.div`
@@ -68,19 +68,38 @@ export default function MovieInfo({ location }) {
     img_src,
     release_date,
   } = location.state;
-
-  // const { data, error, loading } = useQuery(GET_SHOW_TIME, {
-  //   variables: {
-  //     id: movie_id,
-  //   },
-  // });
-  // if (!error && !loading) {
-  //   console.log(data.queryTimeById);
-  // }
+  const areaItems = useRecoilValue(areasInfo);
+  const theaterItems = useRecoilValue(theaterInfo);
+  const [timeList, setTimrList] = useState({});
+  const [dateTime, setDateTime] = useState(new Date(2021, 3, 26));
+  const [area, setArea] = useState(28);
+  const [theater, setTheater] = useState(
+    theaterItems.filter(({ area_id }) => area_id === `${area}`)
+  );
 
   const [queryTimeByMovieId] = useMutation(UPDATE_SHOW_TIME);
 
-  const getShowTimeList = async (id, date, theater_ids) => {
+  useEffect(() => {
+    setTheater(theaterItems.filter(({ area_id }) => area_id === `${area}`));
+  }, [area]);
+
+  useEffect(() => {
+    getShowTimeList(movie_id, setDateFormat(dateTime), theater);
+  }, [dateTime, theater]);
+
+  const classes = useStyles();
+
+  const getAreaValue = (e) => {
+    const areaId = e.target.value;
+    setArea(areaId);
+  };
+
+  const setQueryDate = (date) => {
+    setDateTime(date);
+  };
+
+  const getShowTimeList = async (id, date, theaterArray) => {
+    const theater_ids = theaterArray.map(({ theater_id }) => theater_id);
     try {
       const data = await queryTimeByMovieId({
         variables: {
@@ -89,31 +108,15 @@ export default function MovieInfo({ location }) {
           theater_ids,
         },
       });
+      console.log('data.data.queryTimeByMovieId', data.data.queryTimeByMovieId);
 
-      console.log(data);
+      setTimrList({
+        ...showTimeListGroupByType(theaterArray, data.data.queryTimeByMovieId),
+      });
     } catch (error) {
       console.error(error);
     }
   };
-
-  const areaItems = useRecoilValue(areasInfo);
-  const theaterItems = useRecoilValue(theaterInfo);
-
-  const classes = useStyles();
-  const [area, setArea] = useState(28);
-
-  const getAreaValue = (e) => {
-    const areaId = e.target.value;
-    setArea(areaId);
-
-    const theaterArray = theaterItems.filter(
-      ({ area_id }) => area_id === `${areaId}`
-    );
-
-    const theater_ids = theaterArray.map(({ theater_id }) => theater_id);
-    getShowTimeList(movie_id, '2021-03-29', theater_ids);
-  };
-
   return (
     <Container>
       <CardCont>
@@ -131,15 +134,27 @@ export default function MovieInfo({ location }) {
             </Select>
           </FormControl>
           <div className={classes.root}>
-            {[1, 2, 3, 4, 5].map((num) => {
+            {[0, 1, 2, 3, 4].map((num) => {
+              const date = new Date(2021, 2, 26);
+              //const date = new Date(new Date());
+              date.setDate(date.getDate() + num);
               return (
                 <>
-                  <Paper elevation={2}>
-                    <Button className={classes.btn}>
+                  <Paper elevation={2} key={`${num}-Paper`}>
+                    <Button
+                      className={classes.btn}
+                      key={`${num}-Button`}
+                      onClick={() => {
+                        setQueryDate(date);
+                      }}
+                    >
                       {' '}
-                      <p style={{ margin: '0', fontSize: '20px' }}>
-                        3 月 <br />
-                        {25 + num}日
+                      <p
+                        key={`${num}-p`}
+                        style={{ margin: '0', fontSize: '20px' }}
+                      >
+                        {date.getMonth() + 1} 月 <br />
+                        {date.getDate()}日
                       </p>
                     </Button>
                   </Paper>
@@ -147,17 +162,46 @@ export default function MovieInfo({ location }) {
               );
             })}
           </div>
+          <ul>
+            {Object.keys(timeList).map((key) => {
+              return (
+                <li key={key}>
+                  {key}:
+                  <div key={`${key}-div`}>
+                    {Object.keys(timeList[key]).map((type) => {
+                      return (
+                        <>
+                          <div key={`${key}-${type}`}>{type}</div>
+                          <div key={`${key}-${type}-time`}>
+                            {timeList[key][type].map(({ show_time }) => {
+                              return (
+                                <button key={`${key}-${type}-${show_time}`}>
+                                  {show_time}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </>
+                      );
+                    })}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         </Description>
       </CardCont>
     </Container>
   );
 }
 
-const getShowTimeList = (theater_ids, showTime) => {
-  return theater_ids.reduce((obj, id) => {
-    obj[id] = showTime
-      .filter(({ theater_id }) => id === theater_id)
-      .reduce((typeObj, timeObj) => {
+const showTimeListGroupByType = (theaterArray, showTime) => {
+  return theaterArray.reduce((obj, theater) => {
+    const showTimeInfo = showTime.filter(
+      ({ theater_id }) => theater.theater_id === theater_id
+    );
+    if (showTimeInfo.length > 0) {
+      obj[theater.theater_name] = showTimeInfo.reduce((typeObj, timeObj) => {
         const { type } = timeObj;
         if (!typeObj[type]) {
           typeObj[type] = [];
@@ -166,6 +210,13 @@ const getShowTimeList = (theater_ids, showTime) => {
 
         return typeObj;
       }, {});
+    }
     return obj;
   }, {});
+};
+
+const setDateFormat = (date) => {
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+  return `${date.getFullYear()}-${month}-${day}`;
 };
