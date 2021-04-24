@@ -1,8 +1,8 @@
+import Search from 'components/common/Search';
 import React from 'react';
 import { useLocation, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import Navgation from './Navgation';
-import Search from './Search';
 import UserProfile from './UserProfile';
 
 const StyledHeader = styled.header`
@@ -16,6 +16,16 @@ const StyledHeader = styled.header`
   z-index: 5;
 `;
 
+const SearchDiv = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  left: 0;
+  pointer-events: none;
+`;
+
 function Header() {
   const { pathname } = useLocation();
 
@@ -24,7 +34,11 @@ function Header() {
   return (
     <StyledHeader>
       <Navgation />
-      {pathname === '/' && <Search />}
+      {pathname === '/' && (
+        <SearchDiv>
+          <Search text="search movie title" width="20" />
+        </SearchDiv>
+      )}
       <UserProfile name="wilson" url={url} />
     </StyledHeader>
   );

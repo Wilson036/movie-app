@@ -13,6 +13,7 @@ import { useRecoilValue } from 'recoil';
 import { areasInfo, theaterInfo } from '../store';
 import { useMutation } from '@apollo/client';
 import { UPDATE_SHOW_TIME } from 'gql/mutation';
+import Search from 'components/common/Search';
 
 const Container = styled.div`
   margin: 100px;
@@ -32,13 +33,17 @@ const Post = styled.div`
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
-  height: 800px;
 `;
 
 const Description = styled.div`
   width: 50%;
   padding: 25px;
   color: #fafafa;
+`;
+
+const List = styled.ul`
+  height: 510px;
+  overflow-y: scroll;
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -70,12 +75,13 @@ export default function MovieInfo({ location }) {
   } = location.state;
   const areaItems = useRecoilValue(areasInfo);
   const theaterItems = useRecoilValue(theaterInfo);
+  const initTheaters = theaterItems.filter(({ area_id }) => area_id === '28');
   const [timeList, setTimrList] = useState({});
   const [dateTime, setDateTime] = useState(new Date(2021, 3, 26));
+  const [tempList, setTempList] = useState({});
   const [area, setArea] = useState(28);
-  const [theater, setTheater] = useState(
-    theaterItems.filter(({ area_id }) => area_id === `${area}`)
-  );
+  const [city, setCity] = useState('台北市');
+  const [theater, setTheater] = useState(initTheaters);
 
   const [queryTimeByMovieId] = useMutation(UPDATE_SHOW_TIME);
 
@@ -92,10 +98,25 @@ export default function MovieInfo({ location }) {
   const getAreaValue = (e) => {
     const areaId = e.target.value;
     setArea(areaId);
+    setCity(areaItems.find(({ area_id }) => area_id === areaId).area_name);
   };
 
   const setQueryDate = (date) => {
     setDateTime(date);
+  };
+
+  const searchTheater = (e) => {
+    const theaterName = e.target.value.trim();
+    if (!theaterName) {
+      setTimrList({ ...tempList });
+    }
+    const newList = Object.entries(tempList).reduce((obj, [key, value]) => {
+      if (key.includes(theaterName)) {
+        obj[key] = value;
+      }
+      return obj;
+    }, {});
+    setTimrList({ ...newList });
   };
 
   const getShowTimeList = async (id, date, theaterArray) => {
@@ -108,11 +129,15 @@ export default function MovieInfo({ location }) {
           theater_ids,
         },
       });
-      console.log('data.data.queryTimeByMovieId', data.data.queryTimeByMovieId);
-
+      const list = showTimeListGroupByType(
+        theaterArray,
+        data.data.queryTimeByMovieId
+      );
       setTimrList({
-        ...showTimeListGroupByType(theaterArray, data.data.queryTimeByMovieId),
+        ...list,
       });
+
+      setTempList({ ...list });
     } catch (error) {
       console.error(error);
     }
@@ -123,16 +148,24 @@ export default function MovieInfo({ location }) {
         <Post backDrop="https://movies.yahoo.com.tw/i/o/production/movies/March2021/vsfkM9g2D2WvlOqvcuS2-672x953.jpg" />
         <Description>
           <h1>{title}</h1>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="arae-label">選擇地區</InputLabel>
-            <Select labelId="arae-label" value={area} onChange={getAreaValue}>
-              {areaItems.map((areaInfo) => (
-                <MenuItem value={areaInfo.area_id} key={areaInfo.area_id}>
-                  {areaInfo.area_name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <div>
+            <FormControl className={classes.formControl}>
+              <InputLabel id="arae-label">選擇地區</InputLabel>
+              <Select labelId="arae-label" value={area} onChange={getAreaValue}>
+                {areaItems.map((areaInfo) => (
+                  <MenuItem value={areaInfo.area_id} key={areaInfo.area_id}>
+                    {areaInfo.area_name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Search
+              text="search movie title"
+              width="50"
+              searchEvent={searchTheater}
+            />
+          </div>
+
           <div className={classes.root}>
             {[0, 1, 2, 3, 4].map((num) => {
               const date = new Date(2021, 2, 26);
@@ -162,7 +195,8 @@ export default function MovieInfo({ location }) {
               );
             })}
           </div>
-          <ul>
+          <h1>{city}</h1>
+          <List>
             {Object.keys(timeList).map((key) => {
               return (
                 <li key={key}>
@@ -188,7 +222,7 @@ export default function MovieInfo({ location }) {
                 </li>
               );
             })}
-          </ul>
+          </List>
         </Description>
       </CardCont>
     </Container>
