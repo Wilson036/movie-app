@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledSearch = styled.input`
+  color: #fff;
   font-family: 'Lato', sans-serif;
   font-weight: 300;
   font-size: 14px;

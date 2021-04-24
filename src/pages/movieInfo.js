@@ -87,11 +87,11 @@ export default function MovieInfo({ location }) {
 
   useEffect(() => {
     setTheater(theaterItems.filter(({ area_id }) => area_id === `${area}`));
-  }, [area]);
+  }, [area, theaterItems]);
 
   useEffect(() => {
     getShowTimeList(movie_id, setDateFormat(dateTime), theater);
-  }, [dateTime, theater]);
+  }, [dateTime, theater, movie_id]);
 
   const classes = useStyles();
 

@@ -10,4 +10,9 @@ const theaterInfo = atom({
   default: [],
 });
 
-export { areasInfo, theaterInfo };
+const movies = atom({
+  key: 'movies',
+  default: [],
+});
+
+export { areasInfo, theaterInfo, movies };

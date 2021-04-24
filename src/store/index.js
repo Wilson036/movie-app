@@ -1,3 +1,3 @@
-import { areasInfo, theaterInfo } from './atom';
+import { areasInfo, movies, theaterInfo } from './atom';
 
-export { areasInfo, theaterInfo };
+export { areasInfo, theaterInfo, movies };
