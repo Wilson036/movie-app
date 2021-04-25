@@ -4,10 +4,9 @@ import styled from 'styled-components';
 import { ListToggle } from './ListToggle';
 
 const StyledItem = styled.div`
-  width: calc(20% - 10px);
+  width: 230px;
   background-color: #000;
   background-image: url(${(props) => `${props.backdrop}`});
-  flex: 1 0 auto;
   background-position: center;
   background-size: 100%;
   height: 328px;

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import styled from 'styled-components';
 import Item from './Item';
 
@@ -18,7 +17,6 @@ const TitleWrapper = styled.div`
   margin: 20px 0;
   width: calc(100vw - 80px);
   box-sizing: border-box;
-  justify-content: space-between;
 `;
 
 const Title = styled.div`

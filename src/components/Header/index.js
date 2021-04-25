@@ -3,7 +3,7 @@ import Search from 'components/common/Search';
 import { GET_MOVIES } from 'gql/query';
 import React, { useEffect, useState } from 'react';
 import { useLocation, withRouter } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { movies } from 'store/atom';
 import styled from 'styled-components';
 import Navgation from './Navgation';
@@ -46,7 +46,7 @@ function Header() {
       setMovieData(data.queryMoviesByDate);
       setTempList(data.queryMoviesByDate);
     }
-  }, [data]);
+  }, [data, error, loading]);
 
   const findMovies = (e) => {
     if (!e.target.value) {

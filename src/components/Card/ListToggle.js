@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 const ListToggleDiv = styled.div`
   border: 2px solid rgba(255, 255, 255, 0.2);

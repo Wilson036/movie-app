@@ -46,6 +46,12 @@ const List = styled.ul`
   overflow-y: scroll;
 `;
 
+const StyledDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -148,7 +154,7 @@ export default function MovieInfo({ location }) {
         <Post backDrop="https://movies.yahoo.com.tw/i/o/production/movies/March2021/vsfkM9g2D2WvlOqvcuS2-672x953.jpg" />
         <Description>
           <h1>{title}</h1>
-          <div>
+          <StyledDiv>
             <FormControl className={classes.formControl}>
               <InputLabel id="arae-label">選擇地區</InputLabel>
               <Select labelId="arae-label" value={area} onChange={getAreaValue}>
@@ -164,8 +170,7 @@ export default function MovieInfo({ location }) {
               width="50"
               searchEvent={searchTheater}
             />
-          </div>
-
+          </StyledDiv>
           <div className={classes.root}>
             {[0, 1, 2, 3, 4].map((num) => {
               const date = new Date(2021, 2, 26);
