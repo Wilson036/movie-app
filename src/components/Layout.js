@@ -8,6 +8,7 @@ import { areasInfo, theaterInfo } from '../store';
 
 const MainDiv = styled.main`
   padding: 1em;
+  margin-top: 100px;
   overflow-y: scroll;
   width: 100%;
 `;

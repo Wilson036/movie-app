@@ -14,9 +14,7 @@ const StyledItem = styled.div`
   overflow: hidden;
   margin-right: 10px;
   transition: background 1s ease;
-  &:nth-child(n + 6) {
-    margin-top: 20px;
-  }
+  margin-bottom: 20px;
   &:last-child {
     margin-right: 0;
   }

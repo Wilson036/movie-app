@@ -3,16 +3,31 @@ import styled from 'styled-components';
 import BannerContent from './BannerContent';
 
 const StyledBanner = styled.div`
-  background-image: url('https://www.indiewire.com/wp-content/uploads/2021/03/falcoln-winter-soldier.png');
+  background-image: ${(props) => `url(${props.url})`};
   width: 100%;
   position: relative;
   background-size: cover;
-  min-height: 800px;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 952px;
 `;
-export default function Banner() {
+
+const InnerContainer = styled.div`
+  height: 100%;
+  background-image: linear-gradient(
+    rgba(0, 0, 0, 0.85) 15%,
+    rgba(0, 0, 0, 0.2) 40%,
+    #000 90%
+  );
+  display: flex;
+`;
+
+export default function Banner({ info }) {
   return (
-    <StyledBanner>
-      <BannerContent />
+    <StyledBanner url={info.img_src}>
+      <InnerContainer>
+        <BannerContent info={info} />
+      </InnerContainer>
     </StyledBanner>
   );
 }

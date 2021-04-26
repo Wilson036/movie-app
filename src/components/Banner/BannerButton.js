@@ -25,6 +25,6 @@ const Button = styled.button`
   }
 `;
 
-export default function BannerButton({ text }) {
-  return <Button>{text}</Button>;
+export default function BannerButton({ text, clicKEvent = () => {} }) {
+  return <Button onClick={clicKEvent}>{text}</Button>;
 }

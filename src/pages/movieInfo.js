@@ -12,6 +12,7 @@ import { setDateFormat } from '../util';
 
 const Container = styled.div`
   margin: 100px;
+  margin-top: 0;
 `;
 
 const CardCont = styled.div`
