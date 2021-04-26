@@ -2,12 +2,16 @@ import { useQuery } from '@apollo/client';
 import Search from 'components/common/Search';
 import { GET_MOVIES } from 'gql/query';
 import React, { useEffect, useState } from 'react';
-import { useLocation, withRouter } from 'react-router-dom';
+import { Link, useLocation, withRouter } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { movies } from 'store/atom';
 import styled from 'styled-components';
 import Navgation from './Navgation';
 import UserProfile from './UserProfile';
+
+const Profile = styled.div`
+  margin-left: auto;
+`;
 
 const StyledHeader = styled.header`
   background: linear-gradient(to bottom, black 0%, transparent 100%);
@@ -72,7 +76,10 @@ function Header() {
           />
         </SearchDiv>
       )}
-      <UserProfile name="wilson" url={url} />
+      <Profile>
+        {/* <UserProfile name="wilson" url={url} /> */}
+        <Link to="/singUp">註冊</Link>
+      </Profile>
     </StyledHeader>
   );
 }

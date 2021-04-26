@@ -1,10 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Profile = styled.div`
-  margin-left: auto;
-`;
-
 const User = styled.div`
   cursor: pointer;
   display: flex;
@@ -35,13 +31,11 @@ const Name = styled.h2`
 `;
 export default function UserProfile({ name, url }) {
   return (
-    <Profile>
-      <User>
-        <Name>{name}</Name>
-        <Image>
-          <img src={url} alt="profile" />
-        </Image>
-      </User>
-    </Profile>
+    <User>
+      <Name>{name}</Name>
+      <Image>
+        <img src={url} alt="profile" />
+      </Image>
+    </User>
   );
 }
