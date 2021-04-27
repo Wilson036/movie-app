@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,13 +13,16 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import styled from 'styled-components';
+import { useFormState } from 'react-use-form-state';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(4),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
   },
   avatar: {
     margin: theme.spacing(1),
@@ -38,28 +41,89 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const StyleContainer = styled(Container)`
+  background-color: rgba(0, 0, 0, 0.75);
+  border-radius: 8px;
+  padding-top: 2px;
+`;
 const StyledTextField = styled(TextField)`
   background: #8c8c8c;
   label {
     color: white;
   }
 `;
+const StyledCheckBox = styled.input`
+  width: 16px;
+  height: 16px;
+  margin: 0 8px;
+`;
 
 export default function UserForm() {
   const [userData, setUserData] = useState({});
+  const [errorState, setErrorState] = useState({
+    firstName: '',
+    lastName: '',
+    password: '',
+    email: '',
+    comfiredPassword: '',
+    readTerms: false,
+  });
+  const [disableState, setDisableState] = useState(true);
+  useEffect(() => {
+    const vaildate = Object.values(errorState).some((value) => value);
+    setDisableState(vaildate);
+    console.log(errorState);
+    console.log('vaildate', vaildate);
+  }, [errorState]);
+
   const classes = useStyles();
 
   const getUserData = (e) => {
-    const user = {};
-    user[e.target.name] = e.target.value;
     setUserData({
       ...userData,
       [e.target.name]: e.target.value,
     });
   };
 
+  const vaildateState = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    let errorMsg = '';
+    switch (name) {
+      case 'firstName':
+      case 'lastName':
+        if (!value.trim()) {
+          errorMsg = '請輸入姓名';
+        }
+        break;
+      case 'password':
+        if (value.trim().length < 8) {
+          errorMsg = '密碼長度需大於8';
+        }
+        break;
+      case 'email':
+        if (
+          !/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/.test(
+            value
+          )
+        ) {
+          errorMsg = 'email格式不對';
+        }
+        break;
+      case 'comfiredPassword':
+        if (userData['password'] !== value) {
+          errorMsg = '密碼不吻合';
+        }
+        break;
+      case 'readTerms':
+        setErrorState({ ...errorState, [name]: !e.target.checked });
+        return;
+    }
+    setErrorState({ ...errorState, [name]: errorMsg });
+  };
+
   return (
-    <Container component="main" maxWidth="xs">
+    <StyleContainer component="main" maxWidth="xs">
       {/* <CssBaseline /> */}
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -71,7 +135,6 @@ export default function UserForm() {
         <form
           className={classes.form}
           onSubmit={(e) => {
-            console.log('userData:', userData);
             e.preventDefault();
           }}
         >
@@ -80,15 +143,16 @@ export default function UserForm() {
               <StyledTextField
                 autoComplete="fname"
                 color="secondary"
-                error={true}
                 name="firstName"
                 variant="filled"
                 required
                 fullWidth
                 id="firstName"
                 label="First Name"
+                error={!!errorState.firstName}
+                helperText={errorState.firstName}
                 onChange={getUserData}
-                autoFocus
+                onBlur={vaildateState}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -101,7 +165,10 @@ export default function UserForm() {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                error={!!errorState.lastName}
+                helperText={errorState.lastName}
                 onChange={getUserData}
+                onBlur={vaildateState}
               />
             </Grid>
             <Grid item xs={12}>
@@ -114,6 +181,9 @@ export default function UserForm() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                error={!!errorState.email}
+                helperText={errorState.email}
+                onBlur={vaildateState}
                 onChange={getUserData}
               />
             </Grid>
@@ -128,6 +198,9 @@ export default function UserForm() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                error={!!errorState.password}
+                helperText={errorState.password}
+                onBlur={vaildateState}
                 onChange={getUserData}
               />
             </Grid>
@@ -137,18 +210,27 @@ export default function UserForm() {
                 color="secondary"
                 required
                 fullWidth
-                name="comfiredPassword"
+                name="comfiredPassword"
                 label="Comfired Password"
                 type="password"
                 id="comfired-password"
                 autoComplete="current-password"
+                error={!!errorState.comfiredPassword}
+                helperText={errorState.comfiredPassword}
+                onKeyDown={vaildateState}
                 onChange={getUserData}
               />
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
+                control={
+                  <StyledCheckBox
+                    type="checkbox"
+                    name="readTerms"
+                    onClick={vaildateState}
+                  />
+                }
+                label="我已經詳細閱讀條款"
               />
             </Grid>
           </Grid>
@@ -156,8 +238,9 @@ export default function UserForm() {
             type="submit"
             fullWidth
             variant="contained"
-            color="primary"
+            color="secondary"
             className={classes.submit}
+            disabled={disableState}
           >
             Sign Up
           </Button>
@@ -170,6 +253,6 @@ export default function UserForm() {
           </Grid>
         </form>
       </div>
-    </Container>
+    </StyleContainer>
   );
 }
