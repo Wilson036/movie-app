@@ -1,10 +1,11 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Search from 'components/common/Search';
-import { GET_MOVIES } from 'gql/query';
+import { LOGOUT } from 'gql/mutation';
+import { GET_MOVIES, GET_USER_INFO } from 'gql/query';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, withRouter } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { movies } from 'store/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { movies, loginState } from 'store/atom';
 import styled from 'styled-components';
 import Navgation from './Navgation';
 import UserProfile from './UserProfile';
@@ -43,7 +44,10 @@ function Header() {
       date: '2021-3-24',
     },
   });
+  const userData = useQuery(GET_USER_INFO);
+
   const { pathname } = useLocation();
+  const isLoggedIn = useRecoilValue(loginState);
 
   const [movieData, setMovieData] = useRecoilState(movies);
   const [tempList, setTempList] = useState([]);
@@ -80,9 +84,14 @@ function Header() {
         </SearchDiv>
       )}
       <Profile>
-        {/* <UserProfile name="wilson" url={url} /> */}
-        <Link to="/singUp">註冊</Link>
-        <Link to="/singIn">登入</Link>
+        {isLoggedIn ? (
+          <UserProfile name={userData.data.me.username} url={url} />
+        ) : (
+          <>
+            <Link to="/singUp">註冊</Link>
+            <Link to="/singIn">登入</Link>
+          </>
+        )}
       </Profile>
     </StyledHeader>
   );

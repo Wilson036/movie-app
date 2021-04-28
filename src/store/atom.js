@@ -15,4 +15,9 @@ const movies = atom({
   default: [],
 });
 
-export { areasInfo, theaterInfo, movies };
+const loginState = atom({
+  key: 'isLoggedIn',
+  default: !!localStorage.getItem('token'),
+});
+
+export { areasInfo, theaterInfo, movies, loginState };

@@ -62,9 +62,6 @@ const GlobalStyles = createGlobalStyle`
         color: #fff;
         text-decoration:none;
       }
-     
-    
-    
     
       code,
       pre {
@@ -72,5 +69,22 @@ const GlobalStyles = createGlobalStyle`
         overflow: auto;
         margin: 0 auto;
       }
+
+      .my-fb-class{
+        width: 100%;
+        background: #4c69ba !important;
+        color: #fff;
+        border-right: 1px solid transition !important;
+        border-radius:2px;
+        padding: 10px;
+        font-size: 14px;
+        margin-top: 8px;
+        font-weight: 500;
+        margin-bottom: 20px;
+    }
+
+    .my-fb-class i{
+        margin-right: 20px;
+    }
 `;
 export default GlobalStyles;

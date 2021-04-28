@@ -11,9 +11,14 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { IconButton, InputAdornment } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import GoogleLogin from 'react-google-login';
+import FacebookLogin from 'react-facebook-login';
+import { useMutation } from '@apollo/client';
+import { LOGIN_BY_OAUTH } from 'gql/mutation';
+import { useChangeLoggedState } from 'store/hook';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -64,7 +69,16 @@ const StyledButton = styled(Button)`
   }
 `;
 
-export default function UserForm({ formStyle }) {
+const GOOGLE_LOGIN_BTN = styled(GoogleLogin)`
+  width: 100%;
+  justify-content: center;
+  div {
+    display: flex;
+  }
+`;
+
+const UserForm = (props) => {
+  const { formStyle } = props;
   const userObj = {
     firstName: '',
     lastName: '',
@@ -94,6 +108,7 @@ export default function UserForm({ formStyle }) {
   }, [errorState]);
 
   const classes = useStyles();
+  const changeState = useChangeLoggedState();
 
   const handleClickShowPassword = (name) => {
     setShowPassword({
@@ -155,6 +170,34 @@ export default function UserForm({ formStyle }) {
         return;
     }
     setErrorState({ ...errorState, [name]: errorMsg });
+  };
+
+  const [LoginWithOauth] = useMutation(LOGIN_BY_OAUTH);
+
+  const loginWithOauth = async (email, id) => {
+    try {
+      const { data } = await LoginWithOauth({
+        variables: {
+          email,
+          id,
+        },
+      });
+      localStorage.setItem('token', data.LoginWithOauth);
+      changeState();
+      props.history.push('/');
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const responseGoogle = ({ profileObj }) => {
+    const { email, googleId } = profileObj;
+    loginWithOauth(email, googleId);
+  };
+
+  const responseFacebook = async ({ email, id }) => {
+    console.log({ email, id });
+    loginWithOauth(email, id);
   };
 
   return (
@@ -346,8 +389,27 @@ export default function UserForm({ formStyle }) {
               </Grid>
             </Grid>
           )}
+          or
+          <br />
+          <GOOGLE_LOGIN_BTN
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            buttonText="Login with Google"
+            onSuccess={responseGoogle}
+            cookiePolicy={'single_host_origin'}
+          />
+          <br />
+          <FacebookLogin
+            appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+            autoLoad={false}
+            fields="name,email,picture"
+            callback={responseFacebook}
+            cssClass="my-fb-class"
+            icon="fa-facebook"
+          />
         </form>
       </div>
     </StyleContainer>
   );
-}
+};
+
+export default withRouter(UserForm);

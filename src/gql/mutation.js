@@ -14,4 +14,16 @@ const UPDATE_SHOW_TIME = gql`
   }
 `;
 
-export { UPDATE_SHOW_TIME };
+const LOGIN_BY_OAUTH = gql`
+  mutation LoginWithOauth($email: String!, $id: String!) {
+    LoginWithOauth(email: $email, id: $id)
+  }
+`;
+
+const LOGOUT = gql`
+  mutation logout {
+    logout
+  }
+`;
+
+export { UPDATE_SHOW_TIME, LOGIN_BY_OAUTH, LOGOUT };

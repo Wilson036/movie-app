@@ -41,4 +41,18 @@ const GET_SHOW_TIME = gql`
   }
 `;
 
-export { GET_AREA_INFO, GET_THEATER_INFO, GET_MOVIES, GET_SHOW_TIME };
+const GET_USER_INFO = gql`
+  query me {
+    me {
+      username
+    }
+  }
+`;
+
+export {
+  GET_AREA_INFO,
+  GET_THEATER_INFO,
+  GET_MOVIES,
+  GET_SHOW_TIME,
+  GET_USER_INFO,
+};
