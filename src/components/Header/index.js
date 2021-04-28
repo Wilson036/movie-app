@@ -11,6 +11,9 @@ import UserProfile from './UserProfile';
 
 const Profile = styled.div`
   margin-left: auto;
+  a {
+    margin-left: 12px;
+  }
 `;
 
 const StyledHeader = styled.header`
@@ -79,6 +82,7 @@ function Header() {
       <Profile>
         {/* <UserProfile name="wilson" url={url} /> */}
         <Link to="/singUp">註冊</Link>
+        <Link to="/singIn">登入</Link>
       </Profile>
     </StyledHeader>
   );

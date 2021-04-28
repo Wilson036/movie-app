@@ -7,6 +7,7 @@ import { faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Layout from './components/Layout';
 import movieInfo from 'pages/movieInfo';
 import singUp from 'pages/singUp';
+import singIn from 'pages/singIn';
 
 library.add(fab, faCheck, faPlus);
 
@@ -17,6 +18,7 @@ function App() {
         <Switch>
           <Route path="/" exact component={home} />
           <Route path="/singUp" component={singUp} />
+          <Route path="/singIn" component={singIn} />
           <Route path="/movie-info/:movieId" component={movieInfo} />
         </Switch>
       </Layout>

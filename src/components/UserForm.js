@@ -4,8 +4,6 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -13,7 +11,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import styled from 'styled-components';
-import { useFormState } from 'react-use-form-state';
+import { Link } from 'react-router-dom';
+import { IconButton, InputAdornment } from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -58,25 +58,52 @@ const StyledCheckBox = styled.input`
   margin: 0 8px;
 `;
 
-export default function UserForm() {
-  const [userData, setUserData] = useState({});
-  const [errorState, setErrorState] = useState({
+const StyledButton = styled(Button)`
+  &:disabled {
+    background-color: #e0e0e0 !important;
+  }
+`;
+
+export default function UserForm({ formStyle }) {
+  const userObj = {
     firstName: '',
     lastName: '',
     password: '',
     email: '',
     comfiredPassword: '',
-    readTerms: false,
+  };
+
+  const [userData, setUserData] = useState(userObj);
+  const [errorState, setErrorState] = useState({
+    ...userObj,
+    readTerms: true,
   });
   const [disableState, setDisableState] = useState(true);
+  const [touched, setTouched] = useState(false);
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    comfiredPassword: false,
+  });
   useEffect(() => {
-    const vaildate = Object.values(errorState).some((value) => value);
-    setDisableState(vaildate);
-    console.log(errorState);
-    console.log('vaildate', vaildate);
+    if (touched) {
+      const vaildate = Object.values(errorState)
+        .map(Boolean)
+        .some((value) => value);
+      setDisableState(vaildate);
+    }
   }, [errorState]);
 
   const classes = useStyles();
+
+  const handleClickShowPassword = (name) => {
+    setShowPassword({
+      ...showPassword,
+      [name]: !showPassword[name],
+    });
+  };
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   const getUserData = (e) => {
     setUserData({
@@ -86,8 +113,8 @@ export default function UserForm() {
   };
 
   const vaildateState = (e) => {
-    const name = e.target.name;
     const value = e.target.value;
+    const name = e.target.name;
     let errorMsg = '';
     switch (name) {
       case 'firstName':
@@ -111,12 +138,20 @@ export default function UserForm() {
         }
         break;
       case 'comfiredPassword':
-        if (userData['password'] !== value) {
+        // @ts-ignore
+        const pwd = document.querySelector('#password').value;
+        // @ts-ignore
+        const comfiredPwd = document.querySelector('#comfiredPassword').value;
+        if (pwd !== comfiredPwd) {
           errorMsg = '密碼不吻合';
         }
         break;
       case 'readTerms':
-        setErrorState({ ...errorState, [name]: !e.target.checked });
+        setErrorState({
+          ...errorState,
+          readTerms: !errorState.readTerms,
+        });
+        setTouched(true);
         return;
     }
     setErrorState({ ...errorState, [name]: errorMsg });
@@ -129,8 +164,8 @@ export default function UserForm() {
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign up
+        <Typography component="h1" variant="h4">
+          {formStyle === 'singUp' ? 'Sign Up' : 'Sign In'}
         </Typography>
         <form
           className={classes.form}
@@ -139,38 +174,48 @@ export default function UserForm() {
           }}
         >
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <StyledTextField
-                autoComplete="fname"
-                color="secondary"
-                name="firstName"
-                variant="filled"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                error={!!errorState.firstName}
-                helperText={errorState.firstName}
-                onChange={getUserData}
-                onBlur={vaildateState}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <StyledTextField
-                variant="filled"
-                color="secondary"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-                error={!!errorState.lastName}
-                helperText={errorState.lastName}
-                onChange={getUserData}
-                onBlur={vaildateState}
-              />
-            </Grid>
+            {formStyle === 'singUp' && (
+              <>
+                {' '}
+                <Grid item xs={12} sm={6}>
+                  <StyledTextField
+                    autoComplete="fname"
+                    color="secondary"
+                    name="firstName"
+                    variant="filled"
+                    required
+                    fullWidth
+                    id="firstName"
+                    label="First Name"
+                    error={!!errorState.firstName}
+                    helperText={errorState.firstName}
+                    onChange={(e) => {
+                      getUserData(e);
+                      vaildateState(e);
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <StyledTextField
+                    variant="filled"
+                    color="secondary"
+                    required
+                    fullWidth
+                    id="lastName"
+                    label="Last Name"
+                    name="lastName"
+                    autoComplete="lname"
+                    error={!!errorState.lastName}
+                    helperText={errorState.lastName}
+                    onChange={(e) => {
+                      getUserData(e);
+                      vaildateState(e);
+                    }}
+                  />
+                </Grid>
+              </>
+            )}
+
             <Grid item xs={12}>
               <StyledTextField
                 variant="filled"
@@ -183,8 +228,10 @@ export default function UserForm() {
                 autoComplete="email"
                 error={!!errorState.email}
                 helperText={errorState.email}
-                onBlur={vaildateState}
-                onChange={getUserData}
+                onChange={(e) => {
+                  getUserData(e);
+                  vaildateState(e);
+                }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -195,46 +242,94 @@ export default function UserForm() {
                 fullWidth
                 name="password"
                 label="Password"
-                type="password"
+                type={showPassword.password ? 'text' : 'password'}
                 id="password"
                 autoComplete="current-password"
                 error={!!errorState.password}
                 helperText={errorState.password}
-                onBlur={vaildateState}
-                onChange={getUserData}
+                onChange={(e) => {
+                  getUserData(e);
+                  vaildateState(e);
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={() => {
+                          handleClickShowPassword('password');
+                        }}
+                        onMouseDown={handleMouseDownPassword}
+                      >
+                        {showPassword.password ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
-            <Grid item xs={12}>
-              <StyledTextField
-                variant="filled"
-                color="secondary"
-                required
-                fullWidth
-                name="comfiredPassword"
-                label="Comfired Password"
-                type="password"
-                id="comfired-password"
-                autoComplete="current-password"
-                error={!!errorState.comfiredPassword}
-                helperText={errorState.comfiredPassword}
-                onKeyDown={vaildateState}
-                onChange={getUserData}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <StyledCheckBox
-                    type="checkbox"
-                    name="readTerms"
-                    onClick={vaildateState}
+            {formStyle === 'singUp' && (
+              <>
+                <Grid item xs={12}>
+                  <StyledTextField
+                    variant="filled"
+                    color="secondary"
+                    required
+                    fullWidth
+                    name="comfiredPassword"
+                    label="Comfired Password"
+                    type={showPassword.comfiredPassword ? 'text' : 'password'}
+                    id="comfiredPassword"
+                    autoComplete="current-password"
+                    error={!!errorState.comfiredPassword}
+                    helperText={errorState.comfiredPassword}
+                    onChange={(e) => {
+                      getUserData(e);
+                      vaildateState(e);
+                    }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={() => {
+                              handleClickShowPassword('comfiredPassword');
+                            }}
+                            onMouseDown={handleMouseDownPassword}
+                          >
+                            {showPassword.comfiredPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
-                }
-                label="我已經詳細閱讀條款"
-              />
-            </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={
+                      <StyledCheckBox
+                        type="checkbox"
+                        name="readTerms"
+                        onChange={(e) => {
+                          vaildateState(e);
+                        }}
+                      />
+                    }
+                    label="我已經詳細閱讀條款"
+                  />
+                </Grid>
+              </>
+            )}
           </Grid>
-          <Button
+          <StyledButton
             type="submit"
             fullWidth
             variant="contained"
@@ -242,15 +337,15 @@ export default function UserForm() {
             className={classes.submit}
             disabled={disableState}
           >
-            Sign Up
-          </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
-              </Link>
+            {formStyle === 'singUp' ? '註冊' : '登入'}
+          </StyledButton>
+          {formStyle === 'singUp' && (
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link to="/singIn">已經有帳號了嗎？ 登入</Link>
+              </Grid>
             </Grid>
-          </Grid>
+          )}
         </form>
       </div>
     </StyleContainer>
