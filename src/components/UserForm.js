@@ -17,6 +17,7 @@ import { useChangeLoggedState } from 'store/hook';
 import { vaildateStateFun } from '../util';
 import Password from './Password';
 import useStyles from 'style';
+import CentralText from './common/CentralText';
 
 const StyleContainer = styled(Container)`
   background-color: rgba(0, 0, 0, 0.75);
@@ -227,7 +228,7 @@ const UserForm = (props) => {
               </Grid>
             </Grid>
           )}
-          or
+          <CentralText>或</CentralText>
           <br />
           <GOOGLE_LOGIN_BTN
             clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
