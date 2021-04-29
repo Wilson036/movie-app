@@ -24,4 +24,45 @@ const setDateFormat = (date) => {
   return `${date.getFullYear()}-${month}-${day}`;
 };
 
-export { showTimeListGroupByType, setDateFormat };
+const vaildateStateFun = (e, setErrorState, errorState) => {
+  const value = e.target.value;
+  const name = e.target.name;
+  let errorMsg = null;
+  switch (name) {
+    case 'name':
+      if (!value.trim()) {
+        errorMsg = '請輸入姓名';
+      }
+      break;
+    case 'password':
+      if (value.trim().length < 8) {
+        errorMsg = '密碼長度需大於8';
+      }
+      break;
+    case 'email':
+      if (
+        !/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/.test(
+          value
+        )
+      ) {
+        errorMsg = 'email格式不對';
+      }
+      break;
+    case 'comfiredPassword':
+      // @ts-ignore
+      const pwd = document.querySelector('#password').value;
+      // @ts-ignore
+      const comfiredPwd = document.querySelector('#comfiredPassword').value;
+      if (pwd !== comfiredPwd) {
+        errorMsg = '密碼不吻合';
+      }
+      break;
+    case 'readTerms':
+      // @ts-ignore
+      errorMsg = !errorState[name];
+      break;
+  }
+  setErrorState({ ...errorState, [name]: errorMsg });
+};
+
+export { showTimeListGroupByType, setDateFormat, vaildateStateFun };

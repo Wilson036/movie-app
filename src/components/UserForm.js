@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,6 +19,7 @@ import FacebookLogin from 'react-facebook-login';
 import { useMutation } from '@apollo/client';
 import { LOGIN_BY_OAUTH } from 'gql/mutation';
 import { useChangeLoggedState } from 'store/hook';
+import { vaildateStateFun } from '../util';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -80,8 +81,7 @@ const GOOGLE_LOGIN_BTN = styled(GoogleLogin)`
 const UserForm = (props) => {
   const { formStyle } = props;
   const userObj = {
-    firstName: '',
-    lastName: '',
+    name: '',
     password: '',
     email: '',
     comfiredPassword: '',
@@ -93,17 +93,20 @@ const UserForm = (props) => {
     readTerms: true,
   });
   const [disableState, setDisableState] = useState(true);
-  const [touched, setTouched] = useState(false);
+  const didMount = useRef(false);
   const [showPassword, setShowPassword] = useState({
     password: false,
     comfiredPassword: false,
   });
+
   useEffect(() => {
-    if (touched) {
+    if (didMount.current) {
       const vaildate = Object.values(errorState)
         .map(Boolean)
         .some((value) => value);
       setDisableState(vaildate);
+    } else {
+      didMount.current = true;
     }
   }, [errorState]);
 
@@ -128,48 +131,7 @@ const UserForm = (props) => {
   };
 
   const vaildateState = (e) => {
-    const value = e.target.value;
-    const name = e.target.name;
-    let errorMsg = '';
-    switch (name) {
-      case 'firstName':
-      case 'lastName':
-        if (!value.trim()) {
-          errorMsg = '請輸入姓名';
-        }
-        break;
-      case 'password':
-        if (value.trim().length < 8) {
-          errorMsg = '密碼長度需大於8';
-        }
-        break;
-      case 'email':
-        if (
-          !/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/.test(
-            value
-          )
-        ) {
-          errorMsg = 'email格式不對';
-        }
-        break;
-      case 'comfiredPassword':
-        // @ts-ignore
-        const pwd = document.querySelector('#password').value;
-        // @ts-ignore
-        const comfiredPwd = document.querySelector('#comfiredPassword').value;
-        if (pwd !== comfiredPwd) {
-          errorMsg = '密碼不吻合';
-        }
-        break;
-      case 'readTerms':
-        setErrorState({
-          ...errorState,
-          readTerms: !errorState.readTerms,
-        });
-        setTouched(true);
-        return;
-    }
-    setErrorState({ ...errorState, [name]: errorMsg });
+    vaildateStateFun(e, setErrorState, errorState);
   };
 
   const [LoginWithOauth] = useMutation(LOGIN_BY_OAUTH);
@@ -220,36 +182,18 @@ const UserForm = (props) => {
             {formStyle === 'singUp' && (
               <>
                 {' '}
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                   <StyledTextField
-                    autoComplete="fname"
+                    autoComplete="name"
                     color="secondary"
-                    name="firstName"
+                    name="name"
                     variant="filled"
                     required
                     fullWidth
-                    id="firstName"
-                    label="First Name"
-                    error={!!errorState.firstName}
-                    helperText={errorState.firstName}
-                    onChange={(e) => {
-                      getUserData(e);
-                      vaildateState(e);
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <StyledTextField
-                    variant="filled"
-                    color="secondary"
-                    required
-                    fullWidth
-                    id="lastName"
-                    label="Last Name"
-                    name="lastName"
-                    autoComplete="lname"
-                    error={!!errorState.lastName}
-                    helperText={errorState.lastName}
+                    id="name"
+                    label="Name"
+                    error={!!errorState.name}
+                    helperText={errorState.name}
                     onChange={(e) => {
                       getUserData(e);
                       vaildateState(e);
@@ -361,6 +305,7 @@ const UserForm = (props) => {
                       <StyledCheckBox
                         type="checkbox"
                         name="readTerms"
+                        id="readTerms"
                         onChange={(e) => {
                           vaildateState(e);
                         }}
