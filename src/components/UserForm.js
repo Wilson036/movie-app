@@ -1,51 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import styled from 'styled-components';
 import { Link, withRouter } from 'react-router-dom';
-import { IconButton, InputAdornment } from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import { useMutation } from '@apollo/client';
 import { LOGIN_BY_OAUTH } from 'gql/mutation';
 import { useChangeLoggedState } from 'store/hook';
 import { vaildateStateFun } from '../util';
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-    color: 'white',
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  multilineColor: {
-    color: 'white',
-  },
-}));
+import Password from './Password';
+import useStyles from 'style';
 
 const StyleContainer = styled(Container)`
   background-color: rgba(0, 0, 0, 0.75);
@@ -86,7 +57,9 @@ const UserForm = (props) => {
     email: '',
     comfiredPassword: '',
   };
-
+  const classes = useStyles();
+  const changeState = useChangeLoggedState();
+  const [LoginWithOauth] = useMutation(LOGIN_BY_OAUTH);
   const [userData, setUserData] = useState(userObj);
   const [errorState, setErrorState] = useState({
     ...userObj,
@@ -94,10 +67,6 @@ const UserForm = (props) => {
   });
   const [disableState, setDisableState] = useState(true);
   const didMount = useRef(false);
-  const [showPassword, setShowPassword] = useState({
-    password: false,
-    comfiredPassword: false,
-  });
 
   useEffect(() => {
     if (didMount.current) {
@@ -110,19 +79,6 @@ const UserForm = (props) => {
     }
   }, [errorState]);
 
-  const classes = useStyles();
-  const changeState = useChangeLoggedState();
-
-  const handleClickShowPassword = (name) => {
-    setShowPassword({
-      ...showPassword,
-      [name]: !showPassword[name],
-    });
-  };
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
   const getUserData = (e) => {
     setUserData({
       ...userData,
@@ -133,8 +89,6 @@ const UserForm = (props) => {
   const vaildateState = (e) => {
     vaildateStateFun(e, setErrorState, errorState);
   };
-
-  const [LoginWithOauth] = useMutation(LOGIN_BY_OAUTH);
 
   const loginWithOauth = async (email, id) => {
     try {
@@ -164,7 +118,6 @@ const UserForm = (props) => {
 
   return (
     <StyleContainer component="main" maxWidth="xs">
-      {/* <CssBaseline /> */}
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -222,81 +175,21 @@ const UserForm = (props) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <StyledTextField
-                variant="filled"
-                color="secondary"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type={showPassword.password ? 'text' : 'password'}
-                id="password"
-                autoComplete="current-password"
-                error={!!errorState.password}
-                helperText={errorState.password}
-                onChange={(e) => {
-                  getUserData(e);
-                  vaildateState(e);
-                }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={() => {
-                          handleClickShowPassword('password');
-                        }}
-                        onMouseDown={handleMouseDownPassword}
-                      >
-                        {showPassword.password ? (
-                          <Visibility />
-                        ) : (
-                          <VisibilityOff />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
+              <Password
+                text="password"
+                errorState={errorState}
+                vaildateFun={vaildateState}
+                onChangeFun={getUserData}
               />
             </Grid>
             {formStyle === 'singUp' && (
               <>
                 <Grid item xs={12}>
-                  <StyledTextField
-                    variant="filled"
-                    color="secondary"
-                    required
-                    fullWidth
-                    name="comfiredPassword"
-                    label="Comfired Password"
-                    type={showPassword.comfiredPassword ? 'text' : 'password'}
-                    id="comfiredPassword"
-                    autoComplete="current-password"
-                    error={!!errorState.comfiredPassword}
-                    helperText={errorState.comfiredPassword}
-                    onChange={(e) => {
-                      getUserData(e);
-                      vaildateState(e);
-                    }}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={() => {
-                              handleClickShowPassword('comfiredPassword');
-                            }}
-                            onMouseDown={handleMouseDownPassword}
-                          >
-                            {showPassword.comfiredPassword ? (
-                              <Visibility />
-                            ) : (
-                              <VisibilityOff />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
+                  <Password
+                    text="comfiredPassword"
+                    vaildateFun={vaildateState}
+                    onChangeFun={getUserData}
+                    errorState={errorState}
                   />
                 </Grid>
                 <Grid item xs={12}>
