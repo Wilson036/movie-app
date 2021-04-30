@@ -26,4 +26,22 @@ const LOGOUT = gql`
   }
 `;
 
-export { UPDATE_SHOW_TIME, LOGIN_BY_OAUTH, LOGOUT };
+const SIGN_IN = gql`
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password)
+  }
+`;
+
+const SIGNUP_USER = gql`
+  mutation registerUser(
+    $username: String!
+    $email: String!
+    $password: String!
+  ) {
+    registerUser(
+      data: { username: $username, email: $email, password: $password }
+    )
+  }
+`;
+
+export { UPDATE_SHOW_TIME, LOGIN_BY_OAUTH, LOGOUT, SIGN_IN, SIGNUP_USER };

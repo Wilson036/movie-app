@@ -29,7 +29,7 @@ const vaildateStateFun = (e, setErrorState, errorState) => {
   const name = e.target.name;
   let errorMsg = null;
   switch (name) {
-    case 'name':
+    case 'username':
       if (!value.trim()) {
         errorMsg = '請輸入姓名';
       }
@@ -58,7 +58,6 @@ const vaildateStateFun = (e, setErrorState, errorState) => {
       }
       break;
     case 'readTerms':
-      // @ts-ignore
       errorMsg = !errorState[name];
       break;
   }

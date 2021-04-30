@@ -51,6 +51,7 @@ function Header() {
 
   const [movieData, setMovieData] = useRecoilState(movies);
   const [tempList, setTempList] = useState([]);
+  const [me, setMe] = useState({ username: '' });
 
   useEffect(() => {
     if (!error && !loading) {
@@ -58,6 +59,13 @@ function Header() {
       setTempList(data.queryMoviesByDate);
     }
   }, [data, error, loading]);
+
+  useEffect(() => {
+    const { data, error, loading } = userData;
+    if (!error && !loading) {
+      setMe(data.me);
+    }
+  }, [userData]);
 
   const findMovies = (e) => {
     if (!e.target.value) {
@@ -85,7 +93,7 @@ function Header() {
       )}
       <Profile>
         {isLoggedIn ? (
-          <UserProfile name={userData.data.me.username} url={url} />
+          <UserProfile name={me.username} url={url} />
         ) : (
           <>
             <Link to="/singUp">註冊</Link>

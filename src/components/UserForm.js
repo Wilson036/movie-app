@@ -51,29 +51,36 @@ const GOOGLE_LOGIN_BTN = styled(GoogleLogin)`
 `;
 
 const UserForm = (props) => {
-  const { formStyle } = props;
+  const { formStyle, action } = props;
+  const isSignUp = formStyle === 'singUp';
   const userObj = {
-    name: '',
     password: '',
     email: '',
-    comfiredPassword: '',
   };
+  if (isSignUp) {
+    userObj.username = '';
+    userObj.comfiredPassword = '';
+  }
   const classes = useStyles();
   const changeState = useChangeLoggedState();
   const [LoginWithOauth] = useMutation(LOGIN_BY_OAUTH);
   const [userData, setUserData] = useState(userObj);
   const [errorState, setErrorState] = useState({
     ...userObj,
-    readTerms: true,
+    readTerms: isSignUp,
   });
   const [disableState, setDisableState] = useState(true);
   const didMount = useRef(false);
 
   useEffect(() => {
     if (didMount.current) {
-      const vaildate = Object.values(errorState)
-        .map(Boolean)
-        .some((value) => value);
+      const vaildate =
+        Object.values(errorState)
+          .map(Boolean)
+          .some((value) => value) ||
+        !Object.values(userData)
+          .map(Boolean)
+          .every((value) => value);
       setDisableState(vaildate);
     } else {
       didMount.current = true;
@@ -92,19 +99,7 @@ const UserForm = (props) => {
   };
 
   const loginWithOauth = async (email, id) => {
-    try {
-      const { data } = await LoginWithOauth({
-        variables: {
-          email,
-          id,
-        },
-      });
-      localStorage.setItem('token', data.LoginWithOauth);
-      changeState();
-      props.history.push('/');
-    } catch (err) {
-      console.error(err);
-    }
+    setToken({ email, id }, LoginWithOauth, 'LoginWithOauth');
   };
 
   const responseGoogle = ({ profileObj }) => {
@@ -113,8 +108,27 @@ const UserForm = (props) => {
   };
 
   const responseFacebook = async ({ email, id }) => {
-    console.log({ email, id });
     loginWithOauth(email, id);
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setToken(userData, action, isSignUp ? 'registerUser' : 'login');
+  };
+
+  const setToken = async (varibles, action, key) => {
+    try {
+      const { data } = await action({
+        variables: {
+          ...varibles,
+        },
+      });
+      localStorage.setItem('token', data[key]);
+      changeState();
+      props.history.push('/');
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -126,12 +140,7 @@ const UserForm = (props) => {
         <Typography component="h1" variant="h4">
           {formStyle === 'singUp' ? 'Sign Up' : 'Sign In'}
         </Typography>
-        <form
-          className={classes.form}
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
-        >
+        <form className={classes.form} onSubmit={submitHandler}>
           <Grid container spacing={2}>
             {formStyle === 'singUp' && (
               <>
@@ -140,14 +149,14 @@ const UserForm = (props) => {
                   <StyledTextField
                     autoComplete="name"
                     color="secondary"
-                    name="name"
+                    name="username"
                     variant="filled"
                     required
                     fullWidth
-                    id="name"
+                    id="username"
                     label="Name"
-                    error={!!errorState.name}
-                    helperText={errorState.name}
+                    error={!!errorState.username}
+                    helperText={errorState.username}
                     onChange={(e) => {
                       getUserData(e);
                       vaildateState(e);
@@ -200,9 +209,7 @@ const UserForm = (props) => {
                         type="checkbox"
                         name="readTerms"
                         id="readTerms"
-                        onChange={(e) => {
-                          vaildateState(e);
-                        }}
+                        onChange={vaildateState}
                       />
                     }
                     label="我已經詳細閱讀條款"
@@ -219,7 +226,7 @@ const UserForm = (props) => {
             className={classes.submit}
             disabled={disableState}
           >
-            {formStyle === 'singUp' ? '註冊' : '登入'}
+            {isSignUp ? '註冊' : '登入'}
           </StyledButton>
           {formStyle === 'singUp' && (
             <Grid container justify="flex-end">
