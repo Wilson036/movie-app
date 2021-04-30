@@ -15,9 +15,10 @@ import { useMutation } from '@apollo/client';
 import { LOGIN_BY_OAUTH } from 'gql/mutation';
 import { useChangeLoggedState } from 'store/hook';
 import { vaildateStateFun } from '../util';
-import Password from './Password';
+
 import useStyles from 'style';
 import CentralText from './common/CentralText';
+import Password from './common/Password';
 
 const StyleContainer = styled(Container)`
   background-color: rgba(0, 0, 0, 0.75);
@@ -191,6 +192,11 @@ const UserForm = (props) => {
                 vaildateFun={vaildateState}
                 onChangeFun={getUserData}
               />
+              <Grid container justify="flex-end">
+                <Grid item>
+                  <Link to="/forgetPassword">忘記密碼</Link>
+                </Grid>
+              </Grid>
             </Grid>
             {formStyle === 'singUp' && (
               <>
@@ -228,7 +234,7 @@ const UserForm = (props) => {
           >
             {isSignUp ? '註冊' : '登入'}
           </StyledButton>
-          {formStyle === 'singUp' && (
+          {isSignUp && (
             <Grid container justify="flex-end">
               <Grid item>
                 <Link to="/singIn">已經有帳號了嗎？ 登入</Link>
