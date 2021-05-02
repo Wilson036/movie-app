@@ -44,4 +44,23 @@ const SIGNUP_USER = gql`
   }
 `;
 
-export { UPDATE_SHOW_TIME, LOGIN_BY_OAUTH, LOGOUT, SIGN_IN, SIGNUP_USER };
+const SEND_EMAIL = gql`
+  mutation sendComfiredEmail($email: String!) {
+    sendComfiredEmail(email: $email)
+  }
+`;
+const CHANGE_PASSWORD = gql`
+  mutation changePassword($password: String!, $token: String!) {
+    changePassword(data: { password: $password, token: $token })
+  }
+`;
+
+export {
+  UPDATE_SHOW_TIME,
+  LOGIN_BY_OAUTH,
+  LOGOUT,
+  SIGN_IN,
+  SIGNUP_USER,
+  SEND_EMAIL,
+  CHANGE_PASSWORD,
+};
