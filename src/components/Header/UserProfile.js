@@ -1,7 +1,8 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { Button } from '@material-ui/core';
 import { LOGOUT } from 'gql/mutation';
-import React from 'react';
+import { GET_USER_INFO } from 'gql/query';
+import React, { useEffect, useState } from 'react';
 import { useChangeLoggedState } from 'store/hook';
 import styled from 'styled-components';
 
@@ -33,7 +34,18 @@ const Name = styled.h2`
   height: 40px;
   font-size: 24px;
 `;
-export default function UserProfile({ name, url }) {
+
+const url =
+  'https://www.gravatar.com/avatar/a10d2dadfe08fb12f57abc0c82f74554.jpg?d=identicon';
+export default function UserProfile() {
+  const { data, error, loading } = useQuery(GET_USER_INFO);
+  const [me, setMe] = useState({ username: '' });
+  useEffect(() => {
+    if (!error && !loading) {
+      setMe(data.me);
+    }
+  }, [data]);
+
   const changeState = useChangeLoggedState();
   const [logout] = useMutation(LOGOUT);
   const logoutFun = async () => {
@@ -53,7 +65,7 @@ export default function UserProfile({ name, url }) {
       <Button onClick={logoutFun} color="secondary">
         登出
       </Button>
-      <Name>{name}</Name>
+      <Name>{me.username}</Name>
       <Image>
         <img src={url} alt="profile" />
       </Image>

@@ -1,11 +1,13 @@
 import { useMutation, useQuery } from '@apollo/client';
+import { Snackbar } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 import Search from 'components/common/Search';
-import { LOGOUT } from 'gql/mutation';
 import { GET_MOVIES, GET_USER_INFO } from 'gql/query';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, withRouter } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { movies, loginState } from 'store/atom';
+import { movies, loginState, message } from 'store/atom';
+import { messageState } from 'store/select';
 import styled from 'styled-components';
 import Navgation from './Navgation';
 import UserProfile from './UserProfile';
@@ -44,14 +46,14 @@ function Header() {
       date: '2021-3-24',
     },
   });
-  const userData = useQuery(GET_USER_INFO);
 
   const { pathname } = useLocation();
   const isLoggedIn = useRecoilValue(loginState);
+  const { isOpen } = useRecoilValue(messageState);
 
   const [movieData, setMovieData] = useRecoilState(movies);
   const [tempList, setTempList] = useState([]);
-  const [me, setMe] = useState({ username: '' });
+  const [msg, setMsg] = useRecoilState(message);
 
   useEffect(() => {
     if (!error && !loading) {
@@ -59,13 +61,6 @@ function Header() {
       setTempList(data.queryMoviesByDate);
     }
   }, [data, error, loading]);
-
-  useEffect(() => {
-    const { data, error, loading } = userData;
-    if (!error && !loading) {
-      setMe(data.me);
-    }
-  }, [userData]);
 
   const findMovies = (e) => {
     if (!e.target.value) {
@@ -77,10 +72,31 @@ function Header() {
     );
     setMovieData(newMovies);
   };
-  const url =
-    'https://www.gravatar.com/avatar/a10d2dadfe08fb12f57abc0c82f74554.jpg?d=identicon';
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setMsg('');
+  };
+
   return (
     <StyledHeader>
+      <Snackbar
+        open={isOpen}
+        autoHideDuration={3000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={handleClose}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          severity="success"
+          onClose={handleClose}
+        >
+          {msg}
+        </MuiAlert>
+      </Snackbar>
       <Navgation />
       {pathname === '/' && (
         <SearchDiv>
@@ -93,7 +109,7 @@ function Header() {
       )}
       <Profile>
         {isLoggedIn ? (
-          <UserProfile name={me.username} url={url} />
+          <UserProfile />
         ) : (
           <>
             <Link to="/singUp">註冊</Link>

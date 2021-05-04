@@ -11,6 +11,8 @@ import useStyles from 'style';
 import { vaildateStateFun } from '../util';
 import Password from './common/Password';
 import { useLocation, withRouter } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { message } from 'store/atom';
 const StyleContainer = styled(Container)`
   background-color: rgba(0, 0, 0, 0.75);
   border-radius: 8px;
@@ -44,6 +46,9 @@ function SetPassword(props) {
       setPwdData({ ...pwdData, token });
     }
   }, [pathname]);
+
+  const [msg, setMsg] = useRecoilState(message);
+
   const vaildateState = (e) => {
     vaildateStateFun(e, setErrorState, errorState);
   };
@@ -57,25 +62,30 @@ function SetPassword(props) {
     e.preventDefault();
 
     try {
-      const data = await action({
+      const { data } = await action({
         variables: {
           ...pwdData,
         },
       });
+      if (data.sendComfiredEmail) {
+        setMsg('已寄出驗證信');
+      }
       if (!isComfiredEimal) {
+        setMsg('重設密碼成功，請重新登入');
         props.history.push('/');
       }
     } catch (error) {
       console.error(error);
     }
   };
+
   return (
     <StyleContainer component="main" maxWidth="xs">
       <div className={classes.paper}>
         <Typography component="h1" variant="h4">
           {isComfiredEimal ? 'Forget Password' : 'Reset Password'}
         </Typography>
-        <form className={classes.form} onSubmit={handleSubmit}>
+        <div className={classes.form}>
           <Grid container spacing={2}>
             {isComfiredEimal && (
               <Grid item xs={12}>
@@ -114,15 +124,16 @@ function SetPassword(props) {
             )}
           </Grid>
           <StyledButton
-            type="submit"
+            type="button"
             fullWidth
             variant="contained"
             color="secondary"
             className={classes.submit}
+            onClick={handleSubmit}
           >
             {isComfiredEimal ? '寄送驗證信' : '重設密碼'}
           </StyledButton>
-        </form>
+        </div>
       </div>
     </StyleContainer>
   );

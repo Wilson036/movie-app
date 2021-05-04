@@ -124,9 +124,9 @@ const UserForm = (props) => {
           ...varibles,
         },
       });
+      props.history.push('/');
       localStorage.setItem('token', data[key]);
       changeState();
-      props.history.push('/');
     } catch (err) {
       console.error(err);
     }
@@ -192,11 +192,13 @@ const UserForm = (props) => {
                 vaildateFun={vaildateState}
                 onChangeFun={getUserData}
               />
-              <Grid container justify="flex-end">
-                <Grid item>
-                  <Link to="/forgetPassword">忘記密碼</Link>
+              {formStyle !== 'singUp' && (
+                <Grid container justify="flex-end">
+                  <Grid item>
+                    <Link to="/forgetPassword">忘記密碼</Link>
+                  </Grid>
                 </Grid>
-              </Grid>
+              )}
             </Grid>
             {formStyle === 'singUp' && (
               <>

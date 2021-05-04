@@ -20,4 +20,9 @@ const loginState = atom({
   default: !!localStorage.getItem('token'),
 });
 
-export { areasInfo, theaterInfo, movies, loginState };
+const message = atom({
+  key: 'message',
+  default: '',
+});
+
+export { areasInfo, theaterInfo, movies, loginState, message };

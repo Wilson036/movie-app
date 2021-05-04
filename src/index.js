@@ -27,12 +27,11 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-// @ts-ignore
-const link = authLink.concat(httplink);
 const client = new ApolloClient({
   // @ts-ignore
-  link,
+  link: authLink.concat(httplink),
   cache,
+
   //啟用開發者工具
   connectToDevTools: true,
 });
