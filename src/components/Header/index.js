@@ -1,15 +1,15 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { Snackbar } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 import Search from 'components/common/Search';
-import { GET_MOVIES, GET_USER_INFO } from 'gql/query';
+import { GET_MOVIES } from 'gql/query';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, withRouter } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { movies, loginState, message } from 'store/atom';
 import { messageState } from 'store/select';
 import styled from 'styled-components';
-import Navgation from '../common/Navgation';
+import Navgation from './Navgation';
 import UserProfile from './UserProfile';
 
 const Profile = styled.div`
@@ -62,6 +62,7 @@ function Header() {
     }
   }, [data, error, loading]);
 
+  //查詢電影
   const findMovies = (e) => {
     if (!e.target.value) {
       setMovieData(tempList);
