@@ -1,6 +1,6 @@
 import { InputLabel, MenuItem, Select } from '@material-ui/core';
 import React from 'react';
-import Search from './common/Search';
+import Search from '../../components/common/Search';
 import styled from 'styled-components';
 
 const StyledDiv = styled.div`

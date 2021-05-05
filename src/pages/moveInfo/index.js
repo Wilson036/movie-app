@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
-import { areasInfo, theaterInfo } from '../store';
+import { areasInfo, theaterInfo } from '../../store';
 import { useMutation } from '@apollo/client';
 import { UPDATE_SHOW_TIME } from 'gql/mutation';
-import TheaterSelect from 'components/TheaterSelect';
-import DateSelect from 'components/DateSelect';
-import TimeList from 'components/TimeList';
-import { showTimeListGroupByType } from '../util';
-import { setDateFormat } from '../util';
+import TheaterSelect from 'pages/moveInfo/TheaterSelect';
+import DateSelect from 'pages/moveInfo/DateSelect';
+import TimeList from 'pages/moveInfo/TimeList';
+import { showTimeListGroupByType } from '../../util';
+import { setDateFormat } from '../../util';
 
 const Container = styled.div`
   margin: 100px;

@@ -8,8 +8,8 @@ import {
 } from '@material-ui/core';
 import styled from 'styled-components';
 import useStyles from 'style';
-import { vaildateStateFun } from '../util';
-import Password from './common/Password';
+import { vaildateStateFun } from '../../util';
+import Password from './Password';
 import { useLocation, withRouter } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { message } from 'store/atom';

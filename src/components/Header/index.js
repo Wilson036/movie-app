@@ -9,7 +9,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { movies, loginState, message } from 'store/atom';
 import { messageState } from 'store/select';
 import styled from 'styled-components';
-import Navgation from './Navgation';
+import Navgation from '../common/Navgation';
 import UserProfile from './UserProfile';
 
 const Profile = styled.div`

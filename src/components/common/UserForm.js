@@ -14,11 +14,11 @@ import FacebookLogin from 'react-facebook-login';
 import { useMutation } from '@apollo/client';
 import { LOGIN_BY_OAUTH } from 'gql/mutation';
 import { useChangeLoggedState } from 'store/hook';
-import { vaildateStateFun } from '../util';
+import { vaildateStateFun } from '../../util';
 
 import useStyles from 'style';
-import CentralText from './common/CentralText';
-import Password from './common/Password';
+import CentralText from './CentralText';
+import Password from './Password';
 
 const StyleContainer = styled(Container)`
   background-color: rgba(0, 0, 0, 0.75);

@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import SetPassword from 'components/SetPassword';
+import SetPassword from 'components/common/SetPassword';
 import { SEND_EMAIL } from 'gql/mutation';
 import React from 'react';
 

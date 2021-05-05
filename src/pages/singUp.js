@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import UserForm from 'components/UserForm';
+import UserForm from 'components/common/UserForm';
 import { SIGNUP_USER } from 'gql/mutation';
 import React from 'react';
 

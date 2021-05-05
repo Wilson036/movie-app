@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import SetPassword from 'components/SetPassword';
+import SetPassword from 'components/common/SetPassword';
 import { CHANGE_PASSWORD } from 'gql/mutation';
 import React from 'react';
 
