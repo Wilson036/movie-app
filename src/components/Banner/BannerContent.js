@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
+import { loginState, myList } from 'store/atom';
+import { useSetMoviesList } from 'store/hook';
+import styled, { css } from 'styled-components';
 
 const Content = styled.div`
   position: relative;
@@ -25,14 +28,18 @@ const Title = styled.p`
 
 const ButtonWrapper = styled.div`
   display: flex;
-  width: 400px;
+  width: 200px;
   margin-top: 30px;
-  button:first-child {
-    margin-right: 8px;
-  }
+  justify-content: space-between;
 `;
 
 const Button = styled.button`
+  ${(props) =>
+    props.toggled &&
+    css`
+      border: 2px solid red !important;
+      color: red !important;
+    `}
   background: transparent;
   display: flex;
   height: 40px;
@@ -58,28 +65,32 @@ const Button = styled.button`
 
 export default function BannerContent({ info }) {
   const { title, movie_id } = info;
+  const movieList = useRecoilValue(myList);
+  const setMovieList = useSetMoviesList();
+  const isOnList = movieList.includes(movie_id);
+  const [isToggle, setIsToggle] = useState(isOnList);
+  const isLoggedIn = useRecoilValue(loginState);
 
-  const addList = () => {
-    console.log(`${movie_id} added to my list`);
-  };
+  useEffect(() => {
+    setMovieList(isToggle, movie_id);
+  }, [isToggle]);
 
   return (
     <>
       <Content>
         <Title>{info.title}</Title>
         <h2>Now available</h2>
-
-        {/* <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque id
-        quam sapiente unde voluptatum alias vero debitis, magnam quis quod.
-      </p> */}
         <ButtonWrapper>
           <Button>
             <Link to={{ pathname: `/movie-info/${title}`, state: { ...info } }}>
               時刻表
             </Link>
           </Button>
-          <Button onClick={addList}>+ My List</Button>
+          {isLoggedIn && (
+            <Button toggled={isToggle} onClick={() => setIsToggle(!isToggle)}>
+              {isToggle ? ' On' : '+ My'} List
+            </Button>
+          )}
         </ButtonWrapper>
       </Content>
       <img src={info.img_src} alt={info.title} />
