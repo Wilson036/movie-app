@@ -54,6 +54,11 @@ const CHANGE_PASSWORD = gql`
     changePassword(data: { password: $password, token: $token })
   }
 `;
+const SET_MOVIE_LIST = gql`
+  mutation addFoviesMovie($favorite_movies: [String!]!) {
+    addFoviesMovie(favorite_movies: $favorite_movies)
+  }
+`;
 
 export {
   UPDATE_SHOW_TIME,
@@ -63,4 +68,5 @@ export {
   SIGNUP_USER,
   SEND_EMAIL,
   CHANGE_PASSWORD,
+  SET_MOVIE_LIST,
 };

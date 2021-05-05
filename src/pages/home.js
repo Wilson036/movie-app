@@ -1,9 +1,11 @@
-import Card from 'components/\bCard/Card';
+import Card from 'components/Card';
 import Banner from 'components/Banner';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
-import { movies } from 'store/atom';
+import { movies, myList } from 'store/atom';
 import Carousel from 'react-material-ui-carousel';
+import { useMutation } from '@apollo/client';
+import { SET_MOVIE_LIST } from 'gql/mutation';
 
 const movieInfo = [
   {

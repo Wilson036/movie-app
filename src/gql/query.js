@@ -45,6 +45,7 @@ const GET_USER_INFO = gql`
   query me {
     me {
       username
+      favorite_movies
     }
   }
 `;

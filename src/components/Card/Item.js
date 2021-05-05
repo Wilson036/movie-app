@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { loginState, myList } from 'store/atom';
 import styled from 'styled-components';
 import { ListToggle } from './ListToggle';
 
@@ -77,7 +79,10 @@ const Plot = styled.div`
 `;
 
 export default function Item({ info }) {
-  const { title, anticipation, img_src, release_date } = info;
+  const { title, anticipation, img_src, release_date, movie_id } = info;
+  const isLoggedIn = useRecoilValue(loginState);
+  const movieList = useRecoilValue(myList);
+  const isToggle = movieList.includes(movie_id);
   return (
     <StyledItem backdrop="https://movies.yahoo.com.tw/i/o/production/movies/March2021/vsfkM9g2D2WvlOqvcuS2-672x953.jpg">
       <Link to={{ pathname: `/movie-info/${title}`, state: { ...info } }}>
@@ -85,7 +90,7 @@ export default function Item({ info }) {
           <ItemTitle>{title}</ItemTitle>
           <Rank>{anticipation}</Rank>
           <Plot> {release_date}</Plot>
-          <ListToggle />
+          {isLoggedIn && <ListToggle movie_id={movie_id} isToggle={isToggle} />}
         </OverLay>
       </Link>
     </StyledItem>

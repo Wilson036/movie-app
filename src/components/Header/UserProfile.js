@@ -1,8 +1,11 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Button } from '@material-ui/core';
-import { LOGOUT } from 'gql/mutation';
+import { LOGOUT, SET_MOVIE_LIST } from 'gql/mutation';
 import { GET_USER_INFO } from 'gql/query';
 import React, { useEffect, useState } from 'react';
+import { withRouter } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { message, myList } from 'store/atom';
 import { useChangeLoggedState } from 'store/hook';
 import styled from 'styled-components';
 
@@ -37,23 +40,42 @@ const Name = styled.h2`
 
 const url =
   'https://www.gravatar.com/avatar/a10d2dadfe08fb12f57abc0c82f74554.jpg?d=identicon';
-export default function UserProfile() {
+function UserProfile(props) {
+  const [me, setMe] = useState({ username: '', favorite_movies: [] });
+  const [movieList, setMovieList] = useRecoilState(myList);
+  const [msg, setMsg] = useRecoilState(message);
   const { data, error, loading } = useQuery(GET_USER_INFO);
-  const [me, setMe] = useState({ username: '' });
+  const changeState = useChangeLoggedState();
+  const [logout] = useMutation(LOGOUT);
+  const [addFoviesMovie] = useMutation(SET_MOVIE_LIST);
   useEffect(() => {
     if (!error && !loading) {
+      const { me } = data;
       setMe(data.me);
+      setMovieList(me.favorite_movies);
     }
   }, [data]);
 
-  const changeState = useChangeLoggedState();
-  const [logout] = useMutation(LOGOUT);
+  useEffect(() => {
+    try {
+      addFoviesMovie({
+        variables: {
+          favorite_movies: movieList,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }, [movieList]);
+
   const logoutFun = async () => {
     try {
       const { data } = await logout();
       if (data.logout) {
         localStorage.removeItem('token');
         changeState();
+        setMsg('您已經登出');
+        props.history.push('/');
       }
     } catch (err) {
       console.error(err);
@@ -72,3 +94,5 @@ export default function UserProfile() {
     </User>
   );
 }
+
+export default withRouter(UserProfile);

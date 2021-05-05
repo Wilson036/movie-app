@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSetMoviesList } from 'store/hook';
 import styled from 'styled-components';
 
 const ListToggleDiv = styled.div`
@@ -39,13 +40,19 @@ const ListToggleDiv = styled.div`
   }
 `;
 
-export const ListToggle = () => {
-  const [toggled, setToggled] = useState(false);
+export const ListToggle = ({ movie_id, isToggle = false }) => {
+  const [toggled, setToggled] = useState(isToggle);
+  const setMovieList = useSetMoviesList();
+
+  useEffect(() => {
+    setMovieList(toggled, movie_id);
+  }, [toggled]);
 
   return (
     <ListToggleDiv
       toggled={toggled}
-      onClick={() => {
+      onClick={(e) => {
+        e.preventDefault();
         setToggled(!toggled);
       }}
     >

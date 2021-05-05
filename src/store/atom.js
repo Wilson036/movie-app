@@ -25,4 +25,9 @@ const message = atom({
   default: '',
 });
 
-export { areasInfo, theaterInfo, movies, loginState, message };
+const myList = atom({
+  key: 'mylist',
+  default: [],
+});
+
+export { areasInfo, theaterInfo, movies, loginState, message, myList };

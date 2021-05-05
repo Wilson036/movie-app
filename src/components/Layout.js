@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { GET_AREA_INFO, GET_THEATER_INFO } from 'gql/query';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import Header from '././Header';
@@ -13,21 +13,21 @@ const MainDiv = styled.main`
   width: 100%;
 `;
 
-const FetchData = () => {
+function Layout({ children }) {
   const [area, setArea] = useRecoilState(areasInfo);
   const [theater, setTheater] = useRecoilState(theaterInfo);
   const areaInfo = useQuery(GET_AREA_INFO);
   const treaters = useQuery(GET_THEATER_INFO);
-  if (!areaInfo.loading && !areaInfo.error) {
-    setArea(areaInfo.data.queryAllArea);
-  }
-  if (!treaters.loading && !treaters.error) {
-    setTheater(treaters.data.getAllTheaters);
-  }
-};
 
-function Layout({ children }) {
-  FetchData();
+  useEffect(() => {
+    if (!areaInfo.loading && !areaInfo.error) {
+      setArea(areaInfo.data.queryAllArea);
+    }
+    if (!treaters.loading && !treaters.error) {
+      setTheater(treaters.data.getAllTheaters);
+    }
+  }, [areaInfo, treaters]);
+
   return (
     <>
       <Header />
