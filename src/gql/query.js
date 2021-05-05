@@ -50,10 +50,22 @@ const GET_USER_INFO = gql`
   }
 `;
 
+const GET_MOVIE_LIST = gql`
+  query queryMoviesByIds($ids: [String!]) {
+    queryMoviesByIds(ids: $ids) {
+      title
+      anticipation
+      img_src
+      release_date
+    }
+  }
+`;
+
 export {
   GET_AREA_INFO,
   GET_THEATER_INFO,
   GET_MOVIES,
   GET_SHOW_TIME,
   GET_USER_INFO,
+  GET_MOVIE_LIST,
 };

@@ -5,6 +5,7 @@ import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import Header from '../Header';
 import { areasInfo, theaterInfo } from '../../store';
+import { useLocation } from 'react-router-dom';
 
 const MainDiv = styled.main`
   padding: 1em;
@@ -18,6 +19,12 @@ function Layout({ children }) {
   const [theater, setTheater] = useRecoilState(theaterInfo);
   const areaInfo = useQuery(GET_AREA_INFO);
   const treaters = useQuery(GET_THEATER_INFO);
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   useEffect(() => {
     if (!areaInfo.loading && !areaInfo.error) {

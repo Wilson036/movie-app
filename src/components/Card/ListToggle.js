@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSetMoviesList } from 'store/hook';
 import styled from 'styled-components';
 
@@ -40,12 +40,17 @@ const ListToggleDiv = styled.div`
   }
 `;
 
-export const ListToggle = ({ movie_id, isToggle = false }) => {
+export const ListToggle = ({ movie_id, isToggle }) => {
   const [toggled, setToggled] = useState(isToggle);
   const setMovieList = useSetMoviesList();
+  const isTouched = useRef(false);
 
   useEffect(() => {
-    setMovieList(toggled, movie_id);
+    if (isTouched.current) {
+      setMovieList(toggled, movie_id);
+    } else {
+      isTouched.current = true;
+    }
   }, [toggled]);
 
   return (

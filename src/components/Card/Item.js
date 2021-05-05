@@ -83,6 +83,7 @@ export default function Item({ info }) {
   const isLoggedIn = useRecoilValue(loginState);
   const movieList = useRecoilValue(myList);
   const isToggle = movieList.includes(movie_id);
+  console.log({ isToggle, movie_id });
   return (
     <StyledItem backdrop="https://movies.yahoo.com.tw/i/o/production/movies/March2021/vsfkM9g2D2WvlOqvcuS2-672x953.jpg">
       <Link to={{ pathname: `/movie-info/${title}`, state: { ...info } }}>

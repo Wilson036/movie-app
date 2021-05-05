@@ -30,4 +30,17 @@ const myList = atom({
   default: [],
 });
 
-export { areasInfo, theaterInfo, movies, loginState, message, myList };
+const userData = atom({
+  key: 'userData',
+  default: {},
+});
+
+export {
+  areasInfo,
+  theaterInfo,
+  movies,
+  loginState,
+  message,
+  myList,
+  userData,
+};

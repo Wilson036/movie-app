@@ -31,7 +31,12 @@ function Navgation() {
         <li>
           <Link to="/">Browse</Link>
         </li>
-        {isLoggedIn && <li>My List</li>}
+        {isLoggedIn && (
+          <li>
+            {' '}
+            <Link to="/myList">My List</Link>
+          </li>
+        )}
       </ul>
     </StyledNav>
   );

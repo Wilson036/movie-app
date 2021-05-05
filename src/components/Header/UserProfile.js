@@ -2,10 +2,10 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Button } from '@material-ui/core';
 import { LOGOUT, SET_MOVIE_LIST } from 'gql/mutation';
 import { GET_USER_INFO } from 'gql/query';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { message, myList } from 'store/atom';
+import { message, myList, userData } from 'store/atom';
 import { useChangeLoggedState } from 'store/hook';
 import styled from 'styled-components';
 
@@ -41,13 +41,14 @@ const Name = styled.h2`
 const url =
   'https://www.gravatar.com/avatar/a10d2dadfe08fb12f57abc0c82f74554.jpg?d=identicon';
 function UserProfile(props) {
-  const [me, setMe] = useState({ username: '', favorite_movies: [] });
+  const [me, setMe] = useRecoilState(userData);
   const [movieList, setMovieList] = useRecoilState(myList);
   const [msg, setMsg] = useRecoilState(message);
   const { data, error, loading } = useQuery(GET_USER_INFO);
   const changeState = useChangeLoggedState();
   const [logout] = useMutation(LOGOUT);
   const [addFoviesMovie] = useMutation(SET_MOVIE_LIST);
+  const isTouched = useRef(false);
   useEffect(() => {
     if (!error && !loading) {
       const { me } = data;
@@ -57,14 +58,18 @@ function UserProfile(props) {
   }, [data]);
 
   useEffect(() => {
-    try {
-      addFoviesMovie({
-        variables: {
-          favorite_movies: movieList,
-        },
-      });
-    } catch (error) {
-      console.error(error);
+    if (isTouched.current) {
+      try {
+        addFoviesMovie({
+          variables: {
+            favorite_movies: movieList,
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      isTouched.current = true;
     }
   }, [movieList]);
 
