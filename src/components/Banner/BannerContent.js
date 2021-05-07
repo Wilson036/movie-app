@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { loginState, myList } from 'store/atom';
+import { loginState, userData } from 'store/atom';
 import { useSetMoviesList } from 'store/hook';
 import styled, { css } from 'styled-components';
 
@@ -65,14 +65,20 @@ const Button = styled.button`
 
 export default function BannerContent({ info }) {
   const { title, movie_id } = info;
-  const movieList = useRecoilValue(myList);
+  const { favorite_movies } = useRecoilValue(userData);
   const setMovieList = useSetMoviesList();
-  const isOnList = movieList.includes(movie_id);
+  const isOnList = favorite_movies.includes(movie_id);
   const [isToggle, setIsToggle] = useState(isOnList);
+  console.log({ isToggle });
+  const isTouch = useRef(false);
   const isLoggedIn = useRecoilValue(loginState);
 
   useEffect(() => {
-    setMovieList(isToggle, movie_id);
+    if (isTouch.current) {
+      setMovieList(isToggle, movie_id);
+    } else {
+      isTouch.current = true;
+    }
   }, [isToggle]);
 
   return (

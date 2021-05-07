@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Button } from '@material-ui/core';
-import { LOGOUT, SET_MOVIE_LIST } from 'gql/mutation';
-import { GET_USER_INFO } from 'gql/query';
+import { GET_USER_INFO, LOGOUT, SET_MOVIE_LIST } from 'gql/mutation';
+
 import React, { useEffect, useRef, useState } from 'react';
 import { withRouter } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { message, myList, userData } from 'store/atom';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { loginState, message, userData } from 'store/atom';
 import { useChangeLoggedState } from 'store/hook';
 import styled from 'styled-components';
 
@@ -38,31 +38,39 @@ const Name = styled.h2`
   font-size: 24px;
 `;
 
-const url =
-  'https://www.gravatar.com/avatar/a10d2dadfe08fb12f57abc0c82f74554.jpg?d=identicon';
 function UserProfile(props) {
-  const [me, setMe] = useRecoilState(userData);
-  const [movieList, setMovieList] = useRecoilState(myList);
   const [msg, setMsg] = useRecoilState(message);
-  const { data, error, loading } = useQuery(GET_USER_INFO);
+  const [me, { error, loading }] = useMutation(GET_USER_INFO);
   const changeState = useChangeLoggedState();
+  const isLoggedIn = useRecoilValue(loginState);
   const [logout] = useMutation(LOGOUT);
   const [addFoviesMovie] = useMutation(SET_MOVIE_LIST);
+  const [userInfo, setUserInfo] = useRecoilState(userData);
   const isTouched = useRef(false);
-  useEffect(() => {
-    if (!error && !loading) {
-      const { me } = data;
-      setMe(data.me);
-      setMovieList(me.favorite_movies);
+
+  //因為需要在每次登入都重新呼叫查詢方法
+  //所以先將findme做成mutatio
+  const fetchData = async () => {
+    try {
+      const { data } = await me();
+      setUserInfo(data.me);
+    } catch (error) {
+      console.log(error);
     }
-  }, [data]);
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchData();
+    }
+  }, []);
 
   useEffect(() => {
     if (isTouched.current) {
       try {
         addFoviesMovie({
           variables: {
-            favorite_movies: movieList,
+            favorite_movies: userInfo.favorite_movies,
           },
         });
       } catch (error) {
@@ -71,7 +79,7 @@ function UserProfile(props) {
     } else {
       isTouched.current = true;
     }
-  }, [movieList]);
+  }, [userInfo.favorite_movies]);
 
   const logoutFun = async () => {
     try {
@@ -79,6 +87,7 @@ function UserProfile(props) {
       if (data.logout) {
         localStorage.removeItem('token');
         changeState();
+        setUserInfo({ username: '', avatar: '', favorite_movies: [] });
         setMsg('您已經登出');
         props.history.push('/');
       }
@@ -87,14 +96,16 @@ function UserProfile(props) {
     }
   };
 
+  if (loading) return <div>....loading</div>;
+
   return (
     <User>
       <Button onClick={logoutFun} color="secondary">
         登出
       </Button>
-      <Name>{me.username}</Name>
+      <Name>{userInfo.username}</Name>
       <Image>
-        <img src={url} alt="profile" />
+        <img src={userInfo.avatar} alt="profile" />
       </Image>
     </User>
   );

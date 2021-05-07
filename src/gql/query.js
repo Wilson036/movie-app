@@ -41,15 +41,6 @@ const GET_SHOW_TIME = gql`
   }
 `;
 
-const GET_USER_INFO = gql`
-  query me {
-    me {
-      username
-      favorite_movies
-    }
-  }
-`;
-
 const GET_MOVIE_LIST = gql`
   query queryMoviesByIds($ids: [String!]) {
     queryMoviesByIds(ids: $ids) {
@@ -66,6 +57,5 @@ export {
   GET_THEATER_INFO,
   GET_MOVIES,
   GET_SHOW_TIME,
-  GET_USER_INFO,
   GET_MOVIE_LIST,
 };

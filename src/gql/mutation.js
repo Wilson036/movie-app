@@ -60,6 +60,16 @@ const SET_MOVIE_LIST = gql`
   }
 `;
 
+const GET_USER_INFO = gql`
+  mutation me {
+    me {
+      username
+      favorite_movies
+      avatar
+    }
+  }
+`;
+
 export {
   UPDATE_SHOW_TIME,
   LOGIN_BY_OAUTH,
@@ -69,4 +79,5 @@ export {
   SEND_EMAIL,
   CHANGE_PASSWORD,
   SET_MOVIE_LIST,
+  GET_USER_INFO,
 };

@@ -32,7 +32,7 @@ const myList = atom({
 
 const userData = atom({
   key: 'userData',
-  default: {},
+  default: { username: '', avatar: '', favorite_movies: [] },
 });
 
 export {
