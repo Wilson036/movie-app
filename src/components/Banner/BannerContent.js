@@ -69,7 +69,6 @@ export default function BannerContent({ info }) {
   const setMovieList = useSetMoviesList();
   const isOnList = favorite_movies.includes(movie_id);
   const [isToggle, setIsToggle] = useState(isOnList);
-  console.log({ isToggle });
   const isTouch = useRef(false);
   const isLoggedIn = useRecoilValue(loginState);
 

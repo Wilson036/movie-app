@@ -42,14 +42,16 @@ export default function MovieInfo({ location }) {
     movie_id,
     title,
     anticipation,
+    satifaction,
     img_src,
-    release_date,
+    release_time,
+    info_src,
   } = location.state;
   const [queryTimeByMovieId] = useMutation(UPDATE_SHOW_TIME);
   const areaItems = useRecoilValue(areasInfo);
   const theaterItems = useRecoilValue(theaterInfo);
   const [timeList, setTimrList] = useState({});
-  const [dateTime, setDateTime] = useState(new Date(2021, 3, 26));
+  const [dateTime, setDateTime] = useState(new Date());
   const [tempList, setTempList] = useState({});
   const [area, setArea] = useState(28);
   const [city, setCity] = useState('台北市');
@@ -115,7 +117,7 @@ export default function MovieInfo({ location }) {
   return (
     <Container>
       <CardCont>
-        <Post backDrop="https://movies.yahoo.com.tw/i/o/production/movies/March2021/vsfkM9g2D2WvlOqvcuS2-672x953.jpg" />
+        <Post backDrop={img_src} />
         <Description>
           <h1>{title}</h1>
           <TheaterSelect

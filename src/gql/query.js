@@ -25,8 +25,11 @@ const GET_MOVIES = gql`
       movie_id
       title
       anticipation
+      satifaction
       img_src
-      release_date
+      release_time
+      release_text
+      info_src
     }
   }
 `;
@@ -44,10 +47,14 @@ const GET_SHOW_TIME = gql`
 const GET_MOVIE_LIST = gql`
   query queryMoviesByIds($ids: [String!]) {
     queryMoviesByIds(ids: $ids) {
+      movie_id
       title
       anticipation
+      satifaction
       img_src
-      release_date
+      release_time
+      release_text
+      info_src
     }
   }
 `;

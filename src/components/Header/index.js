@@ -9,6 +9,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { movies, loginState, message } from 'store/atom';
 import { messageState } from 'store/select';
 import styled from 'styled-components';
+import { setDateFormat } from '../../util';
 import Navgation from './Navgation';
 import UserProfile from './UserProfile';
 
@@ -43,7 +44,7 @@ const SearchDiv = styled.div`
 function Header() {
   const { data, error, loading } = useQuery(GET_MOVIES, {
     variables: {
-      date: '2021-3-24',
+      date: setDateFormat(new Date()),
     },
   });
 

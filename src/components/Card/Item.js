@@ -72,25 +72,24 @@ const Plot = styled.div`
   opacity: 0;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
   transition: margin 0.25s ease 0.125s, opacity 0.25s ease 0.25s;
 `;
 
 export default function Item({ info }) {
-  const { title, anticipation, img_src, release_date, movie_id } = info;
+  const { title, anticipation, img_src, release_text, movie_id } = info;
   const isLoggedIn = useRecoilValue(loginState);
-  const { favorite_movies } = useRecoilValue(userData);
-  const isToggle = favorite_movies.includes(movie_id);
+
   return (
-    <StyledItem backdrop="https://movies.yahoo.com.tw/i/o/production/movies/March2021/vsfkM9g2D2WvlOqvcuS2-672x953.jpg">
+    <StyledItem backdrop={img_src}>
       <Link to={{ pathname: `/movie-info/${title}`, state: { ...info } }}>
         <OverLay>
           <ItemTitle>{title}</ItemTitle>
           <Rank>{anticipation}</Rank>
-          <Plot> {release_date}</Plot>
-          {isLoggedIn && <ListToggle movie_id={movie_id} isToggle={isToggle} />}
+          <Plot> {release_text}</Plot>
+          {isLoggedIn && <ListToggle movie_id={movie_id} />}
         </OverLay>
       </Link>
     </StyledItem>

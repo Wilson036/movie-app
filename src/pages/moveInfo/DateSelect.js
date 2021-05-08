@@ -24,8 +24,7 @@ export default function DateSelect({ setQueryDate }) {
   return (
     <StyledDiv>
       {[0, 1, 2, 3, 4].map((num) => {
-        const date = new Date(2021, 2, 26);
-        //const date = new Date(new Date());
+        const date = new Date();
         date.setDate(date.getDate() + num);
         return (
           <>

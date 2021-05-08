@@ -1,5 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useRef, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { userData } from '../../store';
 import { useSetMoviesList } from 'store/hook';
 import styled from 'styled-components';
 
@@ -40,17 +42,26 @@ const ListToggleDiv = styled.div`
   }
 `;
 
-export const ListToggle = ({ movie_id, isToggle }) => {
-  const [toggled, setToggled] = useState(isToggle);
+export const ListToggle = ({ movie_id }) => {
+  const { favorite_movies } = useRecoilValue(userData);
+  const [toggled, setToggled] = useState(false);
   const setMovieList = useSetMoviesList();
-  const isTouched = useRef(false);
+  const isMounted = useRef(false);
 
   useEffect(() => {
-    if (isTouched.current) {
+    setToggled(favorite_movies.includes(movie_id));
+  }, [favorite_movies]);
+
+  useEffect(() => {
+    if (isMounted.current) {
       setMovieList(toggled, movie_id);
     } else {
-      isTouched.current = true;
+      isMounted.current = true;
     }
+
+    return () => {
+      isMounted.current = false;
+    };
   }, [toggled]);
 
   return (

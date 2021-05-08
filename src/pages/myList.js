@@ -3,8 +3,7 @@ import { GET_MOVIE_LIST } from 'gql/query';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { setDateFormat } from '../util';
-import { myList } from '../store';
+import { userData } from '../store';
 
 const StyledLi = styled.li`
   display: flex;
@@ -23,6 +22,11 @@ const PostDiv = styled.div`
 
 const InfoDiv = styled.div`
   padding: 20px;
+  a {
+    line-height: 1.3;
+    color: #434eae;
+    text-decoration: underline;
+  }
 `;
 
 const MovieInfoCard = styled.div`
@@ -32,11 +36,19 @@ const MovieInfoCard = styled.div`
   width: 800px;
 `;
 
+const TextP = styled.p`
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+`;
+
 export default function MyList() {
-  const movies = useRecoilValue(myList);
+  const { favorite_movies } = useRecoilValue(userData);
   const { data, loading, error } = useQuery(GET_MOVIE_LIST, {
     variables: {
-      ids: movies,
+      ids: favorite_movies,
     },
   });
   const [movieInfos, setmovieInfos] = useState([]);
@@ -47,25 +59,35 @@ export default function MyList() {
     }
   }, [data]);
 
+  if (!favorite_movies.length) return <div>尚無喜愛電影資料</div>;
+
   return (
     <ul>
-      {movieInfos.map(({ title, anticipation, img_src, release_date }) => (
-        <StyledLi key={title}>
-          <MovieInfoCard>
-            <PostDiv>
-              <img
-                src="https://movies.yahoo.com.tw/i/o/production/movies/March2021/vsfkM9g2D2WvlOqvcuS2-672x953.jpg"
-                width="294px"
-                alt=""
-              />
-            </PostDiv>
-            <InfoDiv>
-              <h1>{title}</h1>
-              <p>{setDateFormat(new Date(release_date))}</p>
-            </InfoDiv>
-          </MovieInfoCard>
-        </StyledLi>
-      ))}
+      {movieInfos.map(
+        ({
+          title,
+          anticipation,
+          img_src,
+          release_time,
+          release_text,
+          info_src,
+        }) => (
+          <StyledLi key={title}>
+            <MovieInfoCard>
+              <PostDiv>
+                <img src={img_src} width="294px" alt="" />
+              </PostDiv>
+              <InfoDiv>
+                <h1>{title}</h1>
+                <p>{release_time}</p>
+                <p>{anticipation}</p>
+                <TextP>{release_text}</TextP>
+                <a href={info_src}>詳全文</a>
+              </InfoDiv>
+            </MovieInfoCard>
+          </StyledLi>
+        )
+      )}
     </ul>
   );
 }
