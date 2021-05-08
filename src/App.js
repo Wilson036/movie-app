@@ -16,7 +16,7 @@ library.add(fab, faCheck, faPlus);
 
 function App() {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <Layout>
         <Switch>
           <Route path="/" exact component={home} />
