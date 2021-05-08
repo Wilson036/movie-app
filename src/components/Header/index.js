@@ -27,7 +27,7 @@ const StyledHeader = styled.header`
   position: fixed;
   top: 0;
   left: 0;
-  width: 1200px;
+  width: 1280px;
   z-index: 5;
 `;
 
