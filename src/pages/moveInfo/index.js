@@ -13,6 +13,9 @@ import { setDateFormat } from '../../util';
 const Container = styled.div`
   margin: 100px;
   margin-top: 0;
+  h1 {
+    font-size: 42px;
+  }
 `;
 
 const CardCont = styled.div`
@@ -126,9 +129,9 @@ export default function MovieInfo({ location }) {
             areaItems={areaItems}
             searchTheater={searchTheater}
           />
-          <DateSelect setQueryDate={setQueryDate} />
+          <DateSelect setQueryDate={setQueryDate} queryDate={dateTime} />
           <h1>{city}</h1>
-          <TimeList timeList={timeList} />
+          <TimeList timeList={timeList} queryDate={dateTime} />
         </Description>
       </CardCont>
     </Container>

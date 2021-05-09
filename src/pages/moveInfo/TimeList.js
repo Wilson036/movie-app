@@ -1,28 +1,77 @@
 import React from 'react';
 import styled from 'styled-components';
+import { setDateFormat } from '../../util';
 
 const List = styled.ul`
   height: 510px;
   overflow-y: scroll;
+  li {
+    padding-bottom: 28px;
+    border-bottom: 2px solid red;
+    p {
+      font-size: 16px;
+      color: #434eae;
+      font-weight: 700;
+      margin: 8px auto;
+    }
+  }
 `;
-export default function TimeList({ timeList }) {
+
+const Type = styled.div`
+  border-radius: 4px;
+  background-color: #c840aa;
+  font-weight: 500;
+  width: 40px;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 8px;
+`;
+
+const StyledButton = styled.button`
+  pointer-events: auto;
+  color: #26282a;
+  border: 1px solid #26282a;
+  cursor: pointer;
+  padding: 10px;
+  margin-right: 5px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  border-radius: 4px;
+  &:disabled {
+    border: 1px solid #b9b9b9;
+    color: #b9b9b9;
+    pointer-events: none;
+    background: #fff;
+  }
+`;
+
+export default function TimeList({ timeList, queryDate }) {
+  const disabledState = (showTime) => {
+    const time = `${setDateFormat(queryDate)} ${showTime}`;
+    const dateTime = new Date(time);
+    return new Date() > dateTime;
+  };
   return (
     <List>
       {Object.keys(timeList).map((key) => {
         return (
           <li key={key}>
-            {key}:
+            <p>{key}:</p>
             <div key={`${key}-div`}>
               {Object.keys(timeList[key]).map((type) => {
                 return (
                   <>
-                    <div key={`${key}-${type}`}>{type}</div>
+                    <Type key={`${key}-${type}`}>{type}</Type>
                     <div key={`${key}-${type}-time`}>
                       {timeList[key][type].map(({ show_time }) => {
                         return (
-                          <button key={`${key}-${type}-${show_time}`}>
+                          <StyledButton
+                            key={`${key}-${type}-${show_time}`}
+                            disabled={disabledState(show_time)}
+                          >
                             {show_time}
-                          </button>
+                          </StyledButton>
                         );
                       })}
                     </div>

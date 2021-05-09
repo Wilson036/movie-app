@@ -1,5 +1,5 @@
 import { Button, Paper } from '@material-ui/core';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import React from 'react';
 
 const StyledDiv = styled.div`
@@ -14,23 +14,39 @@ const StyledDiv = styled.div`
 
 const StyledButton = styled(Button)`
   width: 100%;
+
+  ${({ selected }) =>
+    selected &&
+    css`
+      color: #fff !important;
+    `}
 `;
 
 const StyleP = styled.p`
   margin: 0;
   font-size: 20px;
 `;
-export default function DateSelect({ setQueryDate }) {
+
+const StyledPaper = styled(Paper)`
+  ${({ selected }) =>
+    selected &&
+    css`
+      background-color: #0c5eab !important;
+    `}
+`;
+export default function DateSelect({ setQueryDate, queryDate }) {
   return (
     <StyledDiv>
-      {[0, 1, 2, 3, 4].map((num) => {
+      {[0, 1, 2, 3, 4].map((num, i) => {
         const date = new Date();
         date.setDate(date.getDate() + num);
+        const selected = isDateEqualTo(date, queryDate);
         return (
           <>
-            <Paper elevation={2} key={`${num}-Paper`}>
+            <StyledPaper elevation={2} key={`${num}-Paper`} selected={selected}>
               <StyledButton
                 key={`${num}-Button`}
+                selected={selected}
                 onClick={() => {
                   setQueryDate(date);
                 }}
@@ -41,10 +57,17 @@ export default function DateSelect({ setQueryDate }) {
                   {date.getDate()}日
                 </StyleP>
               </StyledButton>
-            </Paper>
+            </StyledPaper>
           </>
         );
       })}
     </StyledDiv>
   );
 }
+
+const isDateEqualTo = (date, selectDate) => {
+  return (
+    date.getDate() === selectDate.getDate() &&
+    date.getMonth() === selectDate.getMonth()
+  );
+};
