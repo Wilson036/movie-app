@@ -1,3 +1,4 @@
+//根據電影類別分類時刻表
 const showTimeListGroupByType = (theaterArray, showTime) => {
   return theaterArray.reduce((obj, theater) => {
     const showTimeInfo = showTime.filter(
@@ -24,6 +25,7 @@ const setDateFormat = (date) => {
   return `${date.getFullYear()}-${month}-${day}`;
 };
 
+//檢核註冊及登入表格
 const vaildateStateFun = (e, setErrorState, errorState) => {
   const value = e.target.value;
   const name = e.target.name;

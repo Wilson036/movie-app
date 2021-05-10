@@ -20,6 +20,8 @@ import useStyles from 'style';
 import CentralText from './CentralText';
 import Password from './Password';
 import { CircularProgress } from '@material-ui/core';
+import { useRecoilState } from 'recoil';
+import { message } from 'store';
 
 const StyleContainer = styled(Container)`
   background-color: rgba(0, 0, 0, 0.75);
@@ -65,6 +67,7 @@ const UserForm = (props) => {
   }
   const classes = useStyles();
   const changeState = useChangeLoggedState();
+  const [msg, setMsg] = useRecoilState(message);
   const [LoginWithOauth] = useMutation(LOGIN_BY_OAUTH);
   const [userData, setUserData] = useState(userObj);
   const [errorState, setErrorState] = useState({
@@ -130,150 +133,150 @@ const UserForm = (props) => {
       props.history.push('/');
       localStorage.setItem('token', data[key]);
       changeState();
+      setMsg(isSignUp ? '註冊成功' : '登入成功');
     } catch (err) {
       console.error(err);
     } finally {
       setIsLoading(false);
     }
   };
-
+  if (isLoading)
+    return (
+      <div>
+        {' '}
+        <CircularProgress />
+      </div>
+    );
   return (
     <StyleContainer component="main" maxWidth="xs">
-      {isLoading ? (
-        <div>
-          {' '}
-          <CircularProgress />
-        </div>
-      ) : (
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h4">
-            {formStyle === 'singUp' ? 'Sign Up' : 'Sign In'}
-          </Typography>
-          <form className={classes.form} onSubmit={submitHandler}>
-            <Grid container spacing={2}>
-              {formStyle === 'singUp' && (
-                <>
-                  {' '}
-                  <Grid item xs={12}>
-                    <StyledTextField
-                      autoComplete="name"
-                      color="secondary"
-                      name="username"
-                      variant="filled"
-                      required
-                      fullWidth
-                      id="username"
-                      label="Name"
-                      error={!!errorState.username}
-                      helperText={errorState.username}
-                      onChange={(e) => {
-                        getUserData(e);
-                        vaildateState(e);
-                      }}
-                    />
-                  </Grid>
-                </>
-              )}
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h4">
+          {formStyle === 'singUp' ? 'Sign Up' : 'Sign In'}
+        </Typography>
+        <form className={classes.form} onSubmit={submitHandler}>
+          <Grid container spacing={2}>
+            {formStyle === 'singUp' && (
+              <>
+                {' '}
+                <Grid item xs={12}>
+                  <StyledTextField
+                    autoComplete="name"
+                    color="secondary"
+                    name="username"
+                    variant="filled"
+                    required
+                    fullWidth
+                    id="username"
+                    label="Name"
+                    error={!!errorState.username}
+                    helperText={errorState.username}
+                    onChange={(e) => {
+                      getUserData(e);
+                      vaildateState(e);
+                    }}
+                  />
+                </Grid>
+              </>
+            )}
 
-              <Grid item xs={12}>
-                <StyledTextField
-                  variant="filled"
-                  color="secondary"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  error={!!errorState.email}
-                  helperText={errorState.email}
-                  onChange={(e) => {
-                    getUserData(e);
-                    vaildateState(e);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Password
-                  text="password"
-                  errorState={errorState}
-                  vaildateFun={vaildateState}
-                  onChangeFun={getUserData}
-                />
-                {formStyle !== 'singUp' && (
-                  <Grid container justify="flex-end">
-                    <Grid item>
-                      <Link to="/forgetPassword">忘記密碼</Link>
-                    </Grid>
+            <Grid item xs={12}>
+              <StyledTextField
+                variant="filled"
+                color="secondary"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                error={!!errorState.email}
+                helperText={errorState.email}
+                onChange={(e) => {
+                  getUserData(e);
+                  vaildateState(e);
+                }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Password
+                text="password"
+                errorState={errorState}
+                vaildateFun={vaildateState}
+                onChangeFun={getUserData}
+              />
+              {formStyle !== 'singUp' && (
+                <Grid container justify="flex-end">
+                  <Grid item>
+                    <Link to="/forgetPassword">忘記密碼</Link>
                   </Grid>
-                )}
-              </Grid>
-              {formStyle === 'singUp' && (
-                <>
-                  <Grid item xs={12}>
-                    <Password
-                      text="comfiredPassword"
-                      vaildateFun={vaildateState}
-                      onChangeFun={getUserData}
-                      errorState={errorState}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormControlLabel
-                      control={
-                        <StyledCheckBox
-                          type="checkbox"
-                          name="readTerms"
-                          id="readTerms"
-                          onChange={vaildateState}
-                        />
-                      }
-                      label="我已經詳細閱讀條款"
-                    />
-                  </Grid>
-                </>
+                </Grid>
               )}
             </Grid>
-            <StyledButton
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="secondary"
-              className={classes.submit}
-              disabled={disableState}
-            >
-              {isSignUp ? '註冊' : '登入'}
-            </StyledButton>
-            {isSignUp && (
-              <Grid container justify="flex-end">
-                <Grid item>
-                  <Link to="/singIn">已經有帳號了嗎？ 登入</Link>
+            {formStyle === 'singUp' && (
+              <>
+                <Grid item xs={12}>
+                  <Password
+                    text="comfiredPassword"
+                    vaildateFun={vaildateState}
+                    onChangeFun={getUserData}
+                    errorState={errorState}
+                  />
                 </Grid>
-              </Grid>
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={
+                      <StyledCheckBox
+                        type="checkbox"
+                        name="readTerms"
+                        id="readTerms"
+                        onChange={vaildateState}
+                      />
+                    }
+                    label="我已經詳細閱讀條款"
+                  />
+                </Grid>
+              </>
             )}
-            <CentralText>或</CentralText>
-            <br />
-            <GOOGLE_LOGIN_BTN
-              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-              buttonText="Login with Google"
-              onSuccess={responseGoogle}
-              cookiePolicy={'single_host_origin'}
-            />
-            <br />
-            <FacebookLogin
-              appId={process.env.REACT_APP_FACEBOOK_APP_ID}
-              autoLoad={false}
-              fields="name,email,picture"
-              callback={responseFacebook}
-              cssClass="my-fb-class"
-              icon="fa-facebook"
-            />
-          </form>
-        </div>
-      )}
+          </Grid>
+          <StyledButton
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="secondary"
+            className={classes.submit}
+            disabled={disableState}
+          >
+            {isSignUp ? '註冊' : '登入'}
+          </StyledButton>
+          {isSignUp && (
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link to="/singIn">已經有帳號了嗎？ 登入</Link>
+              </Grid>
+            </Grid>
+          )}
+          <CentralText>或</CentralText>
+          <br />
+          <GOOGLE_LOGIN_BTN
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            buttonText="Login with Google"
+            onSuccess={responseGoogle}
+            cookiePolicy={'single_host_origin'}
+          />
+          <br />
+          <FacebookLogin
+            appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+            autoLoad={false}
+            fields="name,email,picture"
+            callback={responseFacebook}
+            cssClass="my-fb-class"
+            icon="fa-facebook"
+          />
+        </form>
+      </div>
     </StyleContainer>
   );
 };
