@@ -31,7 +31,7 @@ export default function TheaterSelect({
     <StyledDiv>
       <SelectDiv>
         <InputLabel id="arae-label">選擇地區</InputLabel>
-        <StyledSelect labelId="arae-label" onChange={getAreaValue}>
+        <StyledSelect labelId="arae-label" onChange={getAreaValue} value={area}>
           {areaItems.map((areaInfo) => (
             <MenuItem value={areaInfo.area_id} key={areaInfo.area_id}>
               {areaInfo.area_name}

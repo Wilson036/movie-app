@@ -1,6 +1,11 @@
+import { CircularProgress } from '@material-ui/core';
 import React from 'react';
 import styled from 'styled-components';
 import { setDateFormat } from '../../util';
+
+const StyledDiv = styled.div`
+  height: 510px;
+`;
 
 const List = styled.ul`
   height: 510px;
@@ -46,12 +51,22 @@ const StyledButton = styled.button`
   }
 `;
 
-export default function TimeList({ timeList, queryDate }) {
+export default function TimeList({ timeList, queryDate, loading }) {
   const disabledState = (showTime) => {
     const time = `${setDateFormat(queryDate)} ${showTime}`;
     const dateTime = new Date(time);
     return new Date() > dateTime;
   };
+
+  if (loading)
+    return (
+      <StyledDiv>
+        {' '}
+        <CircularProgress />
+      </StyledDiv>
+    );
+
+  if (!Object.values(timeList).length) return <StyledDiv>無上映資料</StyledDiv>;
   return (
     <List>
       {Object.keys(timeList).map((key) => {

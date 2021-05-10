@@ -50,7 +50,7 @@ export const ListToggle = ({ movie_id }) => {
 
   useEffect(() => {
     setToggled(favorite_movies.includes(movie_id));
-  }, [favorite_movies]);
+  }, [favorite_movies, movie_id]);
 
   useEffect(() => {
     if (isMounted.current) {
@@ -62,7 +62,7 @@ export const ListToggle = ({ movie_id }) => {
     return () => {
       isMounted.current = false;
     };
-  }, [toggled]);
+  }, [toggled, movie_id]);
 
   return (
     <ListToggleDiv

@@ -10,7 +10,7 @@ const showTimeListGroupByType = (theaterArray, showTime) => {
           typeObj[type] = [];
         }
         typeObj[type].push(timeObj);
-
+        typeObj[type].sort((a, b) => a.show_time.localeCompare(b.show_time));
         return typeObj;
       }, {});
     }

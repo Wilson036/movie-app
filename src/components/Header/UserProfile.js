@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Button } from '@material-ui/core';
+import { Button, CircularProgress } from '@material-ui/core';
 import { GET_USER_INFO, LOGOUT, SET_MOVIE_LIST } from 'gql/mutation';
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -96,7 +96,12 @@ function UserProfile(props) {
     }
   };
 
-  if (loading) return <div>....loading</div>;
+  if (loading)
+    return (
+      <div>
+        <CircularProgress />
+      </div>
+    );
 
   return (
     <User>

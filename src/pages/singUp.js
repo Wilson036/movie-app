@@ -4,7 +4,6 @@ import { SIGNUP_USER } from 'gql/mutation';
 import React from 'react';
 
 export default function SingUp() {
-  const [registerUser, { loading }] = useMutation(SIGNUP_USER);
-  if (loading) return <div>isLoading ....</div>;
+  const [registerUser] = useMutation(SIGNUP_USER);
   return <UserForm formStyle="singUp" action={registerUser} />;
 }

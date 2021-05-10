@@ -4,7 +4,6 @@ import { SIGN_IN } from 'gql/mutation';
 import React from 'react';
 
 export default function SingIn() {
-  const [login, { loading }] = useMutation(SIGN_IN);
-  if (loading) return <div>isLoading ....</div>;
+  const [login] = useMutation(SIGN_IN);
   return <UserForm formStyle="singIn" action={login} />;
 }

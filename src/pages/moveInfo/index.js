@@ -48,9 +48,8 @@ export default function MovieInfo({ location }) {
     satifaction,
     img_src,
     release_time,
-    info_src,
   } = location.state;
-  const [queryTimeByMovieId] = useMutation(UPDATE_SHOW_TIME);
+  const [queryTimeByMovieId, { loading }] = useMutation(UPDATE_SHOW_TIME);
   const areaItems = useRecoilValue(areasInfo);
   const theaterItems = useRecoilValue(theaterInfo);
   const [timeList, setTimrList] = useState({});
@@ -131,7 +130,11 @@ export default function MovieInfo({ location }) {
           />
           <DateSelect setQueryDate={setQueryDate} queryDate={dateTime} />
           <h1>{city}</h1>
-          <TimeList timeList={timeList} queryDate={dateTime} />
+          <TimeList
+            timeList={timeList}
+            queryDate={dateTime}
+            loading={loading}
+          />
         </Description>
       </CardCont>
     </Container>
