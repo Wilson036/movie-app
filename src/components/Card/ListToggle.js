@@ -62,7 +62,7 @@ export const ListToggle = ({ movie_id }) => {
     return () => {
       isMounted.current = false;
     };
-  }, [toggled, movie_id]);
+  }, [toggled]);
 
   return (
     <ListToggleDiv

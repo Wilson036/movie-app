@@ -102,11 +102,7 @@ function Header() {
       <Navgation />
       {pathname === '/' && (
         <SearchDiv>
-          <Search
-            text="search movie title"
-            width="20"
-            searchEvent={findMovies}
-          />
+          <Search text="搜尋電影名稱" width="20" searchEvent={findMovies} />
         </SearchDiv>
       )}
       <Profile>

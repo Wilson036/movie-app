@@ -39,11 +39,7 @@ export default function TheaterSelect({
           ))}
         </StyledSelect>
       </SelectDiv>
-      <Search
-        text="search movie title"
-        width="50"
-        searchEvent={searchTheater}
-      />
+      <Search text="搜尋戲院名稱" width="50" searchEvent={searchTheater} />
     </StyledDiv>
   );
 }

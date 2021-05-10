@@ -11,6 +11,7 @@ import singIn from 'pages/singIn';
 import forgetPassword from 'pages/forgetPassword';
 import resetPassword from 'pages/resetPassword';
 import myList from 'pages/myList';
+import PrivateRoute from 'components/common/PrivateRoute';
 
 library.add(fab, faCheck, faPlus);
 
@@ -25,7 +26,7 @@ function App() {
           <Route path="/forgetPassword" component={forgetPassword} />
           <Route path="/change-password/:token" component={resetPassword} />
           <Route path="/movie-info/:movieId" component={movieInfo} />
-          <Route path="/myList" component={myList} />
+          <PrivateRoute path="/myList" component={myList} />
         </Switch>
       </Layout>
     </Router>

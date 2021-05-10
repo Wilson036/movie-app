@@ -1,8 +1,8 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { Button, CircularProgress } from '@material-ui/core';
 import { GET_USER_INFO, LOGOUT, SET_MOVIE_LIST } from 'gql/mutation';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { loginState, message, userData } from 'store/atom';
@@ -50,14 +50,14 @@ function UserProfile(props) {
 
   //因為需要在每次登入都重新呼叫查詢方法
   //所以先將findme做成mutatio
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const { data } = await me();
       setUserInfo(data.me);
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [me]);
 
   useEffect(() => {
     if (isLoggedIn) {
