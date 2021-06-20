@@ -69,7 +69,7 @@ export default function MovieInfo({ location }) {
     getShowTimeList(movie_id, setDateFormat(dateTime), theater);
   }, [dateTime, theater, movie_id]);
 
-  const getAreaValue = (e) => {
+  const handleAreaValue = (e) => {
     const areaId = e.target.value;
     setArea(areaId);
     setCity(areaItems.find(({ area_id }) => area_id === areaId).area_name);
@@ -125,7 +125,7 @@ export default function MovieInfo({ location }) {
           <StyledDiv>
             <TheaterSelect
               area={area}
-              getAreaValue={getAreaValue}
+              onGetAreaValueEvent={handleAreaValue}
               areaItems={areaItems}
             />
             <Search

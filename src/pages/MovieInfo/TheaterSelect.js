@@ -15,11 +15,19 @@ const StyledSelect = styled(Select)`
   width: 100px;
 `;
 
-export default function TheaterSelect({ area, getAreaValue, areaItems }) {
+export default function TheaterSelect({
+  area,
+  onGetAreaValueEvent,
+  areaItems,
+}) {
   return (
     <SelectDiv>
       <InputLabel id="arae-label">選擇地區</InputLabel>
-      <StyledSelect labelId="arae-label" onChange={getAreaValue} value={area}>
+      <StyledSelect
+        labelId="arae-label"
+        onChange={onGetAreaValueEvent}
+        value={area}
+      >
         {areaItems.map((areaInfo) => (
           <MenuItem value={areaInfo.area_id} key={areaInfo.area_id}>
             {areaInfo.area_name}
