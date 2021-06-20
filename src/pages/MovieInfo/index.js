@@ -9,6 +9,7 @@ import DateSelect from "pages/MovieInfo/DateSelect";
 import TimeList from "pages/MovieInfo/TimeList";
 import { showTimeListGroupByType } from "../../util";
 import { setDateFormat } from "../../util";
+import Search from "components/common/Search";
 
 const Container = styled.div`
   margin: 100px;
@@ -16,6 +17,11 @@ const Container = styled.div`
   h1 {
     font-size: 42px;
   }
+`;
+const StyledDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const CardCont = styled.div`
@@ -46,7 +52,7 @@ export default function MovieInfo({ location }) {
   const [queryTimeByMovieId, { loading }] = useMutation(UPDATE_SHOW_TIME);
   const areaItems = useRecoilValue(areasInfo);
   const theaterItems = useRecoilValue(theaterInfo);
-  const [timeList, setTimrList] = useState({});
+  const [timeList, setTimeList] = useState({});
   const [dateTime, setDateTime] = useState(new Date());
   const [tempList, setTempList] = useState({});
   const [area, setArea] = useState(28);
@@ -73,10 +79,10 @@ export default function MovieInfo({ location }) {
     setDateTime(date);
   };
 
-  const searchTheater = (e) => {
+  const handleTheaterSearch = (e) => {
     const theaterName = e.target.value.trim();
     if (!theaterName) {
-      setTimrList({ ...tempList });
+      setTimeList({ ...tempList });
       return;
     }
     const newList = Object.entries(tempList).reduce((obj, [key, value]) => {
@@ -85,7 +91,7 @@ export default function MovieInfo({ location }) {
       }
       return obj;
     }, {});
-    setTimrList({ ...newList });
+    setTimeList({ ...newList });
   };
 
   const getShowTimeList = async (id, date, theaterArray) => {
@@ -102,7 +108,7 @@ export default function MovieInfo({ location }) {
         theaterArray,
         data.data.queryTimeByMovieId
       );
-      setTimrList({
+      setTimeList({
         ...list,
       });
       setTempList({ ...list });
@@ -116,12 +122,18 @@ export default function MovieInfo({ location }) {
         <Post backDrop={img_src} />
         <Description>
           <h1>{title}</h1>
-          <TheaterSelect
-            area={area}
-            getAreaValue={getAreaValue}
-            areaItems={areaItems}
-            searchTheater={searchTheater}
-          />
+          <StyledDiv>
+            <TheaterSelect
+              area={area}
+              getAreaValue={getAreaValue}
+              areaItems={areaItems}
+            />
+            <Search
+              text="搜尋戲院名稱"
+              width="50"
+              onSearchEvent={handleTheaterSearch}
+            />
+          </StyledDiv>
           <DateSelect setQueryDate={setQueryDate} queryDate={dateTime} />
           <h1>{city}</h1>
           <TimeList

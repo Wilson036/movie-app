@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const StyledSearch = styled.input`
   color: #fff;
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
   font-weight: 300;
   font-size: 14px;
   height: 36px;
@@ -23,13 +23,14 @@ const StyledSearch = styled.input`
   }
 `;
 
-function Search({ text, width, searchEvent }) {
+function Search({ text, width, onSearchEvent }) {
   return (
     <StyledSearch
       type="search"
       placeholder={text}
       width={width}
-      onBlur={searchEvent}
+      onBlur={onSearchEvent}
+      onChange={onSearchEvent}
     />
   );
 }
