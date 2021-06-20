@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { loginState } from 'store/atom';
-import styled from 'styled-components';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { loginState } from "store/atom";
+import styled from "styled-components";
 
 const StyledNav = styled.nav`
   ul {
@@ -23,7 +23,7 @@ const StyledNav = styled.nav`
   }
 `;
 
-function Navgation() {
+function Navigation() {
   const isLoggedIn = useRecoilValue(loginState);
   return (
     <StyledNav>
@@ -33,7 +33,7 @@ function Navgation() {
         </li>
         {isLoggedIn && (
           <li>
-            {' '}
+            {" "}
             <Link to="/myList">My List</Link>
           </li>
         )}
@@ -42,4 +42,4 @@ function Navgation() {
   );
 }
 
-export default Navgation;
+export default Navigation;

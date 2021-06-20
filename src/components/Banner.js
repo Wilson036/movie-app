@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import BannerContent from './BannerContent';
+import React from "react";
+import styled from "styled-components";
+import BannerContent from "./BannerContent";
 
 const StyledBanner = styled.div`
   background-image: ${(props) => `url(${props.url})`};

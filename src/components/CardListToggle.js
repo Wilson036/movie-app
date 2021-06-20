@@ -1,13 +1,13 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { userData } from '../../store';
-import { useSetMoviesList } from 'store/hook';
-import styled from 'styled-components';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useRef, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { userData } from "../store";
+import { useSetMoviesList } from "store/hook";
+import styled from "styled-components";
 
 const ListToggleDiv = styled.div`
   border: 2px solid rgba(255, 255, 255, 0.2);
-  background: ${({ toggled }) => (toggled ? '#e50914' : 'none')};
+  background: ${({ toggled }) => (toggled ? "#e50914" : "none")};
   width: 32px;
   height: 32px;
   font-size: 16px;
@@ -26,7 +26,7 @@ const ListToggleDiv = styled.div`
   }
   div {
     position: absolute;
-    top: ${({ toggled }) => (toggled ? '-32px' : '0')};
+    top: ${({ toggled }) => (toggled ? "-32px" : "0")};
     left: 4px;
     height: 64px;
     width: 32px;
@@ -73,8 +73,8 @@ export const ListToggle = ({ movie_id }) => {
       }}
     >
       <div>
-        <FontAwesomeIcon icon={['fas', 'plus']} size="lg" />
-        <FontAwesomeIcon icon={['fas', 'check']} size="lg" />
+        <FontAwesomeIcon icon={["fas", "plus"]} size="lg" />
+        <FontAwesomeIcon icon={["fas", "check"]} size="lg" />
       </div>
     </ListToggleDiv>
   );

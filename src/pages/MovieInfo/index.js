@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
-import { areasInfo, theaterInfo } from '../../store';
-import { useMutation } from '@apollo/client';
-import { UPDATE_SHOW_TIME } from 'gql/mutation';
-import TheaterSelect from 'pages/moveInfo/TheaterSelect';
-import DateSelect from 'pages/moveInfo/DateSelect';
-import TimeList from 'pages/moveInfo/TimeList';
-import { showTimeListGroupByType } from '../../util';
-import { setDateFormat } from '../../util';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import { areasInfo, theaterInfo } from "../../store";
+import { useMutation } from "@apollo/client";
+import { UPDATE_SHOW_TIME } from "gql/mutation";
+import TheaterSelect from "pages/MovieInfo/TheaterSelect";
+import DateSelect from "pages/MovieInfo/DateSelect";
+import TimeList from "pages/MovieInfo/TimeList";
+import { showTimeListGroupByType } from "../../util";
+import { setDateFormat } from "../../util";
 
 const Container = styled.div`
   margin: 100px;
@@ -41,14 +41,8 @@ const Description = styled.div`
 `;
 
 export default function MovieInfo({ location }) {
-  const {
-    movie_id,
-    title,
-    anticipation,
-    satifaction,
-    img_src,
-    release_time,
-  } = location.state;
+  const { movie_id, title, anticipation, satifaction, img_src, release_time } =
+    location.state;
   const [queryTimeByMovieId, { loading }] = useMutation(UPDATE_SHOW_TIME);
   const areaItems = useRecoilValue(areasInfo);
   const theaterItems = useRecoilValue(theaterInfo);
@@ -56,9 +50,9 @@ export default function MovieInfo({ location }) {
   const [dateTime, setDateTime] = useState(new Date());
   const [tempList, setTempList] = useState({});
   const [area, setArea] = useState(28);
-  const [city, setCity] = useState('台北市');
+  const [city, setCity] = useState("台北市");
   const [theater, setTheater] = useState(
-    theaterItems.filter(({ area_id }) => area_id === '28')
+    theaterItems.filter(({ area_id }) => area_id === "28")
   );
 
   useEffect(() => {

@@ -1,17 +1,17 @@
-import home from 'pages/home';
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fab } from '@fortawesome/free-brands-svg-icons';
-import { faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
-import Layout from './components/common/Layout';
-import movieInfo from 'pages/moveInfo';
-import singUp from 'pages/singUp';
-import singIn from 'pages/singIn';
-import forgetPassword from 'pages/forgetPassword';
-import resetPassword from 'pages/resetPassword';
-import myList from 'pages/myList';
-import PrivateRoute from 'components/common/PrivateRoute';
+import home from "pages/Home";
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+import { faCheck, faPlus } from "@fortawesome/free-solid-svg-icons";
+import Layout from "./components/common/Layout";
+import movieInfo from "pages/MovieInfo";
+import singUp from "pages/SingUp";
+import singIn from "pages/SingIn";
+import forgetPassword from "pages/ForgetPassword";
+import resetPassword from "pages/ResetPassword";
+import myList from "pages/MyList";
+import PrivateRoute from "components/common/PrivateRoute";
 
 library.add(fab, faCheck, faPlus);
 

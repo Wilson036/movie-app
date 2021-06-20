@@ -1,17 +1,17 @@
-import { useQuery } from '@apollo/client';
-import { Snackbar } from '@material-ui/core';
-import MuiAlert from '@material-ui/lab/Alert';
-import Search from 'components/common/Search';
-import { GET_MOVIES } from 'gql/query';
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation, withRouter } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { movies, loginState, message } from 'store/atom';
-import { messageState } from 'store/select';
-import styled from 'styled-components';
-import { setDateFormat } from '../../util';
-import Navgation from './Navgation';
-import UserProfile from './UserProfile';
+import { useQuery } from "@apollo/client";
+import { Snackbar } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
+import Search from "components/common/Search";
+import { GET_MOVIES } from "gql/query";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, withRouter } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { movies, loginState, message } from "store/atom";
+import { messageState } from "store/select";
+import styled from "styled-components";
+import { setDateFormat } from "../util";
+import Navigation from "./Navigation";
+import UserProfile from "./UserProfile";
 
 const Profile = styled.div`
   margin-left: auto;
@@ -76,10 +76,10 @@ function Header() {
   };
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
-    setMsg('');
+    setMsg("");
   };
 
   return (
@@ -87,7 +87,7 @@ function Header() {
       <Snackbar
         open={isOpen}
         autoHideDuration={3000}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         onClose={handleClose}
       >
         <MuiAlert
@@ -99,8 +99,8 @@ function Header() {
           {msg}
         </MuiAlert>
       </Snackbar>
-      <Navgation />
-      {pathname === '/' && (
+      <Navigation />
+      {pathname === "/" && (
         <SearchDiv>
           <Search text="搜尋電影名稱" width="20" searchEvent={findMovies} />
         </SearchDiv>

@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import Item from './Item';
+import React from "react";
+import styled from "styled-components";
+import Item from "./CardItem";
 
 const TitleList = styled.div`
   padding: 20px 40px;

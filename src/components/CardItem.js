@@ -1,9 +1,9 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { loginState } from 'store/atom';
-import styled from 'styled-components';
-import { ListToggle } from './ListToggle';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { loginState } from "store/atom";
+import styled from "styled-components";
+import { ListToggle } from "./CardListToggle";
 
 const StyledItem = styled.div`
   width: 230px;

@@ -1,11 +1,11 @@
-import { useQuery } from '@apollo/client';
-import { GET_AREA_INFO, GET_THEATER_INFO } from 'gql/query';
-import React, { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import styled from 'styled-components';
-import Header from '../Header';
-import { areasInfo, theaterInfo } from '../../store';
-import { useLocation } from 'react-router-dom';
+import { useQuery } from "@apollo/client";
+import { GET_AREA_INFO, GET_THEATER_INFO } from "gql/query";
+import React, { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import styled from "styled-components";
+import Header from "../Header";
+import { areasInfo, theaterInfo } from "../../store";
+import { useLocation } from "react-router-dom";
 
 const MainDiv = styled.main`
   padding: 1em;
