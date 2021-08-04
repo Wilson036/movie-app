@@ -1,7 +1,7 @@
-import { useMutation } from '@apollo/client';
-import SetPassword from 'components/common/SetPassword';
-import { CHANGE_PASSWORD } from 'gql/mutation';
-import React from 'react';
+import { useMutation } from "@apollo/client";
+import SetPassword from "components/common/SetPassword";
+import { CHANGE_PASSWORD } from "gql/mutation";
+import React from "react";
 
 export default function ResetPassword() {
   const [changePassword, { error, loading }] = useMutation(CHANGE_PASSWORD);

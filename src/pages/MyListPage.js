@@ -1,9 +1,9 @@
-import { useQuery } from '@apollo/client';
-import { GET_MOVIE_LIST } from 'gql/query';
-import React, { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import styled from 'styled-components';
-import { userData } from '../store';
+import { useQuery } from "@apollo/client";
+import { GET_MOVIE_LIST } from "gql/query";
+import React, { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import styled from "styled-components";
+import { userData } from "../store";
 
 const StyledLi = styled.li`
   display: flex;

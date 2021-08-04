@@ -1,7 +1,7 @@
-import { CircularProgress } from '@material-ui/core';
-import React from 'react';
-import styled from 'styled-components';
-import { setDateFormat } from '../../util';
+import { CircularProgress } from "@material-ui/core";
+import React from "react";
+import styled from "styled-components";
+import { setDateFormat } from "../../util";
 
 const StyledDiv = styled.div`
   height: 510px;
@@ -61,7 +61,7 @@ export default function TimeList({ timeList, queryDate, loading }) {
   if (loading)
     return (
       <StyledDiv>
-        {' '}
+        {" "}
         <CircularProgress />
       </StyledDiv>
     );
