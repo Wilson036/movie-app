@@ -1,27 +1,27 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import styled from 'styled-components';
-import { Link, withRouter } from 'react-router-dom';
-import GoogleLogin from 'react-google-login';
-import FacebookLogin from 'react-facebook-login';
-import { useMutation } from '@apollo/client';
-import { LOGIN_BY_OAUTH } from 'gql/mutation';
-import { useChangeLoggedState } from 'store/hook';
-import { vaildateStateFun } from '../../util';
+import React, { useState } from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Grid from "@material-ui/core/Grid";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Typography from "@material-ui/core/Typography";
+import Container from "@material-ui/core/Container";
+import styled from "styled-components";
+import { Link, withRouter } from "react-router-dom";
+import GoogleLogin from "react-google-login";
+import FacebookLogin from "react-facebook-login";
+import { useMutation } from "@apollo/client";
+import { LOGIN_BY_OAUTH } from "gql/mutation";
+import { useChangeLoggedState } from "store/hook";
+import { validateStateFun } from "../../util";
 
-import useStyles from 'style';
-import CentralText from './CentralText';
-import Password from './Password';
-import { CircularProgress } from '@material-ui/core';
-import { useRecoilState } from 'recoil';
-import { message } from 'store';
+import useStyles from "style";
+import CentralText from "./CentralText";
+import Password from "./Password";
+import { CircularProgress } from "@material-ui/core";
+import { useRecoilState } from "recoil";
+import { message } from "store";
 
 const StyleContainer = styled(Container)`
   background-color: rgba(0, 0, 0, 0.75);
@@ -56,42 +56,34 @@ const GOOGLE_LOGIN_BTN = styled(GoogleLogin)`
 
 const UserForm = (props) => {
   const { formStyle, action } = props;
-  const isSignUp = formStyle === 'singUp';
+  const isSignUp = formStyle === "singUp";
   const userObj = {
-    password: '',
-    email: '',
+    password: "",
+    email: "",
   };
   if (isSignUp) {
-    userObj.username = '';
-    userObj.comfiredPassword = '';
+    userObj.username = "";
+    userObj.confirmedPassword = "";
   }
   const classes = useStyles();
   const changeState = useChangeLoggedState();
-  const [msg, setMsg] = useRecoilState(message);
+  const [_, setMsg] = useRecoilState(message);
   const [LoginWithOauth] = useMutation(LOGIN_BY_OAUTH);
   const [userData, setUserData] = useState(userObj);
   const [errorState, setErrorState] = useState({
     ...userObj,
     readTerms: isSignUp,
   });
-  const [disableState, setDisableState] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const didMount = useRef(false);
 
-  useEffect(() => {
-    if (didMount.current) {
-      const vaildate =
-        Object.values(errorState)
-          .map(Boolean)
-          .some((value) => value) ||
-        !Object.values(userData)
-          .map(Boolean)
-          .every((value) => value);
-      setDisableState(vaildate);
-    } else {
-      didMount.current = true;
-    }
-  }, [errorState]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const disableState =
+    Object.values(errorState)
+      .map(Boolean)
+      .some((value) => value) ||
+    !Object.values(userData)
+      .map(Boolean)
+      .every((value) => value);
 
   const getUserData = (e) => {
     setUserData({
@@ -100,12 +92,12 @@ const UserForm = (props) => {
     });
   };
 
-  const vaildateState = (e) => {
-    vaildateStateFun(e, setErrorState, errorState);
+  const validateState = (e) => {
+    validateStateFun(e, setErrorState, errorState);
   };
 
   const loginWithOauth = async (email, id) => {
-    setToken({ email, id }, LoginWithOauth, 'LoginWithOauth');
+    setToken({ email, id }, LoginWithOauth, "LoginWithOauth");
   };
 
   const responseGoogle = ({ profileObj }) => {
@@ -119,21 +111,21 @@ const UserForm = (props) => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setToken(userData, action, isSignUp ? 'registerUser' : 'login');
+    setToken(userData, action, isSignUp ? "registerUser" : "login");
   };
 
-  const setToken = async (varibles, action, key) => {
+  const setToken = async (variables, action, key) => {
     try {
       setIsLoading(true);
       const { data } = await action({
         variables: {
-          ...varibles,
+          ...variables,
         },
       });
-      props.history.push('/');
-      localStorage.setItem('token', data[key]);
+      props.history.push("/");
+      localStorage.setItem("token", data[key]);
       changeState();
-      setMsg(isSignUp ? '註冊成功' : '登入成功');
+      setMsg(isSignUp ? "註冊成功" : "登入成功");
     } catch (err) {
       console.error(err);
     } finally {
@@ -143,7 +135,7 @@ const UserForm = (props) => {
   if (isLoading)
     return (
       <div>
-        {' '}
+        {" "}
         <CircularProgress />
       </div>
     );
@@ -154,13 +146,13 @@ const UserForm = (props) => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h4">
-          {formStyle === 'singUp' ? 'Sign Up' : 'Sign In'}
+          {formStyle === "singUp" ? "Sign Up" : "Sign In"}
         </Typography>
         <form className={classes.form} onSubmit={submitHandler}>
           <Grid container spacing={2}>
-            {formStyle === 'singUp' && (
+            {formStyle === "singUp" && (
               <>
-                {' '}
+                {" "}
                 <Grid item xs={12}>
                   <StyledTextField
                     autoComplete="name"
@@ -175,7 +167,7 @@ const UserForm = (props) => {
                     helperText={errorState.username}
                     onChange={(e) => {
                       getUserData(e);
-                      vaildateState(e);
+                      validateState(e);
                     }}
                   />
                 </Grid>
@@ -196,7 +188,7 @@ const UserForm = (props) => {
                 helperText={errorState.email}
                 onChange={(e) => {
                   getUserData(e);
-                  vaildateState(e);
+                  validateState(e);
                 }}
               />
             </Grid>
@@ -204,10 +196,10 @@ const UserForm = (props) => {
               <Password
                 text="password"
                 errorState={errorState}
-                vaildateFun={vaildateState}
+                validateFun={validateState}
                 onChangeFun={getUserData}
               />
-              {formStyle !== 'singUp' && (
+              {formStyle !== "singUp" && (
                 <Grid container justify="flex-end">
                   <Grid item>
                     <Link to="/forgetPassword">忘記密碼</Link>
@@ -215,12 +207,12 @@ const UserForm = (props) => {
                 </Grid>
               )}
             </Grid>
-            {formStyle === 'singUp' && (
+            {formStyle === "singUp" && (
               <>
                 <Grid item xs={12}>
                   <Password
-                    text="comfiredPassword"
-                    vaildateFun={vaildateState}
+                    text="confirmedPassword"
+                    validateFun={validateState}
                     onChangeFun={getUserData}
                     errorState={errorState}
                   />
@@ -232,7 +224,7 @@ const UserForm = (props) => {
                         type="checkbox"
                         name="readTerms"
                         id="readTerms"
-                        onChange={vaildateState}
+                        onChange={validateState}
                       />
                     }
                     label="我已經詳細閱讀條款"
@@ -249,7 +241,7 @@ const UserForm = (props) => {
             className={classes.submit}
             disabled={disableState}
           >
-            {isSignUp ? '註冊' : '登入'}
+            {isSignUp ? "註冊" : "登入"}
           </StyledButton>
           {isSignUp && (
             <Grid container justify="flex-end">
@@ -264,7 +256,7 @@ const UserForm = (props) => {
             clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
             buttonText="Login with Google"
             onSuccess={responseGoogle}
-            cookiePolicy={'single_host_origin'}
+            cookiePolicy={"single_host_origin"}
           />
           <br />
           <FacebookLogin

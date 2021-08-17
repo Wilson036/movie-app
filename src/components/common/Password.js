@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { IconButton, InputAdornment } from '@material-ui/core';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
-import TextField from '@material-ui/core/TextField';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import { IconButton, InputAdornment } from "@material-ui/core";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
+import TextField from "@material-ui/core/TextField";
+import styled from "styled-components";
 
 const StyledTextField = styled(TextField)`
   background: #8c8c8c;
@@ -13,7 +13,7 @@ const StyledTextField = styled(TextField)`
 
 export default function Password({
   text,
-  vaildateFun,
+  validateFun,
   onChangeFun,
   errorState,
 }) {
@@ -34,14 +34,14 @@ export default function Password({
       fullWidth
       name={text}
       label={label}
-      type={showPassword ? 'text' : 'password'}
+      type={showPassword ? "text" : "password"}
       id={text}
       autoComplete={`"current-${text}"`}
       error={!!errorState[text]}
       helperText={errorState[text]}
       onChange={(e) => {
         onChangeFun(e);
-        vaildateFun(e);
+        validateFun(e);
       }}
       InputProps={{
         endAdornment: (

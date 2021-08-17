@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Container,
   Grid,
   TextField,
   Typography,
-} from '@material-ui/core';
-import styled from 'styled-components';
-import useStyles from 'style';
-import { vaildateStateFun } from '../../util';
-import Password from './Password';
-import { useLocation, withRouter } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { message } from 'store/atom';
+} from "@material-ui/core";
+import styled from "styled-components";
+import useStyles from "style";
+import { validateStateFun } from "../../util";
+import Password from "./Password";
+import { useLocation, withRouter } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { message } from "store/atom";
 const StyleContainer = styled(Container)`
   background-color: rgba(0, 0, 0, 0.75);
   border-radius: 8px;
@@ -35,7 +35,7 @@ const StyledButton = styled(Button)`
 function SetPassword(props) {
   const { formType, action } = props;
   const { pathname } = useLocation();
-  const isComfiredEimal = formType === 'comfired';
+  const isComfiredEimal = formType === "comfired";
   const classes = useStyles();
   const [errorState, setErrorState] = useState({});
   const [pwdData, setPwdData] = useState({});
@@ -50,7 +50,7 @@ function SetPassword(props) {
   const [msg, setMsg] = useRecoilState(message);
 
   const vaildateState = (e) => {
-    vaildateStateFun(e, setErrorState, errorState);
+    validateStateFun(e, setErrorState, errorState);
   };
   const getPwdData = (e) => {
     setPwdData({
@@ -68,11 +68,11 @@ function SetPassword(props) {
         },
       });
       if (data.sendComfiredEmail) {
-        setMsg('已寄出驗證信');
+        setMsg("已寄出驗證信");
       }
       if (!isComfiredEimal) {
-        setMsg('重設密碼成功，請重新登入');
-        props.history.push('/');
+        setMsg("重設密碼成功，請重新登入");
+        props.history.push("/");
       }
     } catch (error) {
       console.error(error);
@@ -83,7 +83,7 @@ function SetPassword(props) {
     <StyleContainer component="main" maxWidth="xs">
       <div className={classes.paper}>
         <Typography component="h1" variant="h4">
-          {isComfiredEimal ? 'Forget Password' : 'Reset Password'}
+          {isComfiredEimal ? "Forget Password" : "Reset Password"}
         </Typography>
         <div className={classes.form}>
           <Grid container spacing={2}>
@@ -131,7 +131,7 @@ function SetPassword(props) {
             className={classes.submit}
             onClick={handleSubmit}
           >
-            {isComfiredEimal ? '寄送驗證信' : '重設密碼'}
+            {isComfiredEimal ? "寄送驗證信" : "重設密碼"}
           </StyledButton>
         </div>
       </div>
